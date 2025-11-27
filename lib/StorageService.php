@@ -110,4 +110,49 @@ class StorageService {
     /**
      * Save webhook configuration with token
      */
+    public static function saveWebhookConfig($token, $config) {
+        return self::update(TEMPLATE_MAP_FILE, function($map) use ($token, $config) {
+            if (!isset($map['webhooks'])) {
+                $map['webhooks'] = [];
+            }  
+            $map['webhooks'][$token] = $config;
+            return $map;
+        }, []);
+    }
+
+    /**
+     * Get webhook configuration by token
+     */
+    public static function getWebhookConfigByToken($token) {
+        $map = self::load(TEMPLATE_MAP_FILE, []);
+        return $map['webhooks'][$token] ?? null;
+    }
+
+    /**
+     * Get all webhook configurations
+     */
+    public static function getAllWebhooks() {
+        $map = self::load(TEMPLATE_MAP_FILE, []);
+        return $map['webhooks'] ?? [];
+    }
+
+    /**
+     * Delete webhook configuration by token
+     */
+    public static function deleteWebhook($token) {
+        return self::update(TEMPLATE_MAP_FILE, function($map) use ($token) {
+            if (isset($map['webhooks'][$token])) {
+                unset($map['webhooks'][$token]);
+            }
+            return $map;
+        }, []);
+    }
+
+    /**
+     * Check if token exists
+     */
+    public static function tokenExists($token) {
+        $map = self::load(TEMPLATE_MAP_FILE, []);
+        return isset($map['webhooks'][$token]);
+    }
 }

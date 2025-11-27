@@ -34,6 +34,54 @@
             padding: 40px 0;
         }
 
+        .navbar {
+    background: white;
+    padding: 16px 24px;
+    margin-bottom: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .navbar-brand {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .navbar-nav {
+        display: flex;
+        gap: 16px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-link {
+        color: #4a5568;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-weight: 500;
+    }
+
+    .nav-link:hover {
+        background: #edf7f8;
+        color: var(--primary-color);
+    }
+
+    .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+    }
+
         .main-container {
             max-width: 900px;
             margin: 0 auto;
@@ -282,6 +330,21 @@
 
 <body>
     <div class="container">
+     <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <i class="fa-brands fa-whatsapp"></i>
+            WhatsApp Email Bridge
+        </a>
+        <ul class="navbar-nav">
+            <li><a href="index.html" class="nav-link active">
+                <i class="fa-solid fa-plus"></i> Create Webhook
+            </a></li>
+            <li><a href="webhooks.html" class="nav-link">
+                <i class="fa-solid fa-list"></i> Manage Webhooks
+            </a></li>
+        </ul>
+    </nav>
+
         <div class="main-container">
             <div class="header-section">
                 <h1>
@@ -610,6 +673,7 @@
         async function generateConfiguration() {
             const mode = document.querySelector('.mode-card.active').dataset.mode;
             const listId = listSelect.value;
+            const listName = listSelect.options[listSelect.selectedIndex].text; // Get list name
             const webhookUrlRoot = webhookUrlRootInput.value.trim().replace(/\/$/, '');
             let config = { mode };
             
@@ -651,6 +715,7 @@
 
             const data = await apiCall('save_configuration', 'POST', {
                 list_id: listId,
+                list_name: listName,  // Send list name
                 webhook_url_root: webhookUrlRoot,
                 config: config
             });
@@ -664,35 +729,53 @@
                 showAlert('error', `Failed: ${data.message}`);
             }
         }
-
         function showSuccessResponse(data, mode, config) {
             let html = `<div class="alert alert-success mt-4">
                 <i class="fa-solid fa-circle-check"></i> Configuration Saved Successfully!
+                <br><small class="text-muted">Token: <code>${data.token}</code></small>
             </div>`;
             
-            html += `<div class="webhook-url-box"><strong>Subscribe Webhook:</strong><br>${data.webhook_url}</div>`;
+            html += `<div class="webhook-url-box">
+                <strong>Subscribe Webhook:</strong><br>${data.webhook_url}
+            </div>`;
             html += `<button class="btn btn-copy" onclick="copyText('${data.webhook_url}')">
                 <i class="fa-solid fa-copy"></i> Copy Subscribe Webhook
             </button>`;
             
             if (data.autoresponder_webhook_url) {
-                html += `<div class="webhook-url-box"><strong>Autoresponder Webhook:</strong><br>${data.autoresponder_webhook_url}</div>`;
+                html += `<div class="webhook-url-box">
+                    <strong>Autoresponder Webhook:</strong><br>${data.autoresponder_webhook_url}
+                </div>`;
                 html += `<button class="btn btn-copy" onclick="copyText('${data.autoresponder_webhook_url}')">
                     <i class="fa-solid fa-copy"></i> Copy Autoresponder Webhook
                 </button>`;
             }
             
-            html += `<div class="instructions"><strong><i class="fa-solid fa-clipboard-list"></i> Next Steps:</strong>`;
-            html += `<ol class="mt-2 mb-0"><li>Copy the webhook URL(s) above</li>`;
-            html += `<li>Go to your Sendy dashboard and edit the list</li>`;
-            html += `<li>Paste in the Subscribe webhook field</li>`;
+            html += `<div class="instructions">
+                <strong><i class="fa-solid fa-clipboard-list"></i> Next Steps:</strong>
+                <ol class="mt-2 mb-0">
+                    <li>Copy the webhook URL above (unique for this configuration)</li>
+                    <li>Go to your Sendy dashboard and edit <strong>${data.list_name}</strong></li>
+                    <li>Paste in the Subscribe webhook field</li>`;
+            
             if (mode === 'drip_sequence') {
-                html += `<li>Set up cron: <code>*/15 * * * * php process_drip.php</code></li>`;
+                html += `<li><strong>Important:</strong> Set up cron job to run every 15 minutes:
+                    <div class="webhook-url-box mt-2" style="font-size: 12px;">
+                        */15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_drip.php
+                    </div>
+                </li>`;
             }
+            
             if (mode === 'mirror_autoresponder') {
-                html += `<li>In Sendy Settings → Rules, add autoresponder webhook</li>`;
+                html += `<li>In Sendy Settings → Rules, add the autoresponder webhook above</li>`;
             }
-            html += `</ol></div>`;
+            
+            html += `</ol>
+                <div class="alert alert-info mt-3 mb-0">
+                    <i class="fa-solid fa-info-circle"></i> <strong>Note:</strong> This webhook URL is unique! 
+                    You can create multiple webhooks for the same list with different configurations.
+                </div>
+            </div>`;
             
             responseContainer.innerHTML = html;
         }
