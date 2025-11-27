@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Drip Configuration</title>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #33B1BA;
+            --secondary-color: #F3A929;
+            --primary-dark: #2a9aa2;
+            --secondary-dark: #e09520;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 48px;
+        }
+
+        .header-section {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 32px;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header-section h1 i {
+            color: var(--primary-color);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #718096;
+            margin: 0;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .form-label i {
+            color: var(--primary-color);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            background: #f7fafc;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(51, 177, 186, 0.1);
+        }
+
+        .info-box {
+            background: #edf7f8;
+            border-left: 4px solid var(--primary-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #2c5282;
+            margin-top: 12px;
+        }
+
+        .mode-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            height: 100%;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(51, 177, 186, 0.1);
+        }
+
+        .mode-card.active {
+            border-color: var(--primary-color);
+            background: #edf7f8;
+            box-shadow: 0 4px 16px rgba(51, 177, 186, 0.15);
+        }
+
+        .mode-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-size: 20px;
+        }
+
+        .mode-card.active .mode-icon {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
+        }
+
+        .mode-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .mode-description {
+            font-size: 14px;
+            color: #718096;
+            margin: 8px 0 0 0;
+        }
+
+        .drip-builder {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .drip-step {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-remove {
+            background: #fed7d7;
+            color: #c53030;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-remove:hover {
+            background: #fc8181;
+            color: white;
+        }
+
+        .btn-add-step {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: var(--primary-color);
+            border: 2px dashed var(--primary-color);
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .btn-add-step:hover {
+            background: #edf7f8;
+            border-style: solid;
+        }
+
+        .mapping-row {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            margin-top: 32px;
+        }
+
+        .btn-primary-custom:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #238a91 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(51, 177, 186, 0.3);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-copy:hover {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, #c88419 100%);
+        }
+
+        .webhook-url-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .instructions {
+            background: #fffbeb;
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .spinner-border-sm {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="main-container">
+            <div class="header-section">
+                <h1>
+                    <i class="fa-brands fa-whatsapp"></i>
+                    WhatsApp Drip Configuration
+                </h1>
+                <p class="subtitle">Configure automated WhatsApp messaging for your Sendy lists</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="fa-solid fa-link"></i>
+                    1. Public URL Root
+                </label>
+                <input type="text" class="form-control" id="webhookUrlRoot"
+                    placeholder="https://yourdomain.com/path-to-webhook-folder">
+                <div class="info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Enter the public URL where your <code>webhook_api.php</code> file is hosted.
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="fa-solid fa-building"></i>
+                    2. Select Sendy Brand
+                </label>
+                <select class="form-select" id="brandSelect" disabled>
+                    <option>Loading Brands...</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="fa-solid fa-list"></i>
+                    3. Select Target Mailing List
+                </label>
+                <select class="form-select" id="listSelect" disabled>
+                    <option>Select a Brand First</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="fa-solid fa-sliders"></i>
+                    4. Choose Drip Mode
+                </label>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="mode-card active" data-mode="single">
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <div class="mode-icon">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </div>
+                                <h6 class="mode-title">Single Message</h6>
+                            </div>
+                            <p class="mode-description">
+                                Send one WhatsApp message immediately when someone subscribes.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mode-card" data-mode="drip_sequence">
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <div class="mode-icon">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                </div>
+                                <h6 class="mode-title">Drip Sequence</h6>
+                            </div>
+                            <p class="mode-description">
+                                Create a timed sequence of WhatsApp messages independent of email.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mode-card" data-mode="mirror_autoresponder">
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <div class="mode-icon">
+                                    <i class="fa-solid fa-mirror"></i>
+                                </div>
+                                <h6 class="mode-title">Mirror Autoresponder</h6>
+                            </div>
+                            <p class="mode-description">
+                                Send WhatsApp messages in sync with Sendy email autoresponders.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="singleConfig" class="mb-4">
+                <label class="form-label">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    5. Select WhatsApp Template
+                </label>
+                <select class="form-select" id="singleTemplate" disabled>
+                    <option>Loading Templates...</option>
+                </select>
+            </div>
+
+            <div id="dripConfig" class="mb-4 d-none">
+                <label class="form-label">
+                    <i class="fa-solid fa-list-check"></i>
+                    5. Build Your Drip Sequence
+                </label>
+                <div class="drip-builder" id="dripBuilder"></div>
+                <button class="btn btn-add-step mt-3" onclick="addDripStep()">
+                    <i class="fa-solid fa-plus"></i> Add Step
+                </button>
+            </div>
+
+            <div id="mirrorConfig" class="mb-4 d-none">
+                <label class="form-label">
+                    <i class="fa-solid fa-layer-group"></i>
+                    5. Map Autoresponder Steps to WhatsApp Templates
+                </label>
+                <div class="info-box mb-3">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    Map each email autoresponder step to a WhatsApp template.
+                </div>
+                <div id="autoresponderMapping"></div>
+                <button class="btn btn-add-step w-100 mt-3" onclick="addAutoresponderMapping()">
+                    <i class="fa-solid fa-plus"></i> Add Mapping
+                </button>
+            </div>
+
+            <button class="btn btn-primary-custom" id="generateButton" disabled onclick="generateConfiguration()">
+                <i class="fa-solid fa-rocket"></i>
+                Generate Webhook Configuration
+            </button>
+
+            <div id="responseContainer"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const PHP_API_FILE = 'webhook_api.php';
+        let templates = [];
+        let dripStepCounter = 0;
+        let autoresponderStepCounter = 1;
+
+        const brandSelect = document.getElementById('brandSelect');
+        const listSelect = document.getElementById('listSelect');
+        const webhookUrlRootInput = document.getElementById('webhookUrlRoot');
+        const generateButton = document.getElementById('generateButton');
+        const responseContainer = document.getElementById('responseContainer');
+        const singleTemplate = document.getElementById('singleTemplate');
+        const singleConfig = document.getElementById('singleConfig');
+        const dripConfig = document.getElementById('dripConfig');
+        const mirrorConfig = document.getElementById('mirrorConfig');
+        const dripBuilder = document.getElementById('dripBuilder');
+        const autoresponderMapping = document.getElementById('autoresponderMapping');
+
+        document.addEventListener('DOMContentLoaded', initializeUI);
+
+        async function apiCall(action, method = 'GET', body = null, queryParams = {}) {
+            let url = `${PHP_API_FILE}?action=${action}`;
+            for (const [key, value] of Object.entries(queryParams)) {
+                url += `&${key}=${encodeURIComponent(value)}`;
+            }
+            const options = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body && method === 'POST') options.body = JSON.stringify(body);
+            try {
+                const response = await fetch(url, options);
+                return await response.json();
+            } catch (error) {
+                return { status: 'error', message: `Network error: ${error.message}` };
+            }
+        }
+
+        function initializeUI() {
+            fetchBrands();
+            fetchTemplates();
+            setupModeSelector();
+            brandSelect.addEventListener('change', fetchLists);
+            listSelect.addEventListener('change', checkReadiness);
+            singleTemplate.addEventListener('change', checkReadiness);
+            webhookUrlRootInput.addEventListener('input', checkReadiness);
+        }
+
+        function setupModeSelector() {
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    switchMode(card.dataset.mode);
+                });
+            });
+        }
+
+        function switchMode(mode) {
+            singleConfig.classList.add('d-none');
+            dripConfig.classList.add('d-none');
+            mirrorConfig.classList.add('d-none');
+            
+            if (mode === 'single') {
+                singleConfig.classList.remove('d-none');
+            } else if (mode === 'drip_sequence') {
+                dripConfig.classList.remove('d-none');
+                if (dripBuilder.children.length === 0) addDripStep();
+            } else if (mode === 'mirror_autoresponder') {
+                mirrorConfig.classList.remove('d-none');
+                if (autoresponderMapping.children.length === 0) addAutoresponderMapping();
+            }
+            checkReadiness();
+        }
+
+        function checkReadiness() {
+            const mode = document.querySelector('.mode-card.active').dataset.mode;
+            let ready = brandSelect.value && listSelect.value && webhookUrlRootInput.value.trim();
+            
+            if (mode === 'single') {
+                ready = ready && singleTemplate.value;
+            } else if (mode === 'drip_sequence') {
+                ready = ready && dripBuilder.children.length > 0;
+            } else if (mode === 'mirror_autoresponder') {
+                ready = ready && autoresponderMapping.children.length > 0;
+            }
+            generateButton.disabled = !ready;
+        }
+
+        async function fetchBrands() {
+            brandSelect.disabled = true;
+            const data = await apiCall('brands');
+            brandSelect.innerHTML = '<option value="">Select Brand</option>';
+            if (!data.status && Array.isArray(data)) {
+                data.forEach(brand => {
+                    brandSelect.innerHTML += `<option value="${brand.id}">${brand.name}</option>`;
+                });
+            }
+            brandSelect.disabled = false;
+        }
+
+        async function fetchLists() {
+            const brandId = brandSelect.value;
+            listSelect.disabled = true;
+            if (!brandId) {
+                listSelect.innerHTML = '<option>Select a Brand First</option>';
+                return;
+            }
+            const data = await apiCall('lists', 'GET', null, { brandId });
+            listSelect.innerHTML = '<option value="">Select List</option>';
+            if (!data.status && Array.isArray(data)) {
+                data.forEach(list => {
+                    listSelect.innerHTML += `<option value="${list.id}">${list.name}</option>`;
+                });
+            }
+            listSelect.disabled = false;
+        }
+
+        async function fetchTemplates() {
+            singleTemplate.disabled = true;
+            const data = await apiCall('whatsapp_templates');
+            singleTemplate.innerHTML = '<option value="">Select Template</option>';
+            if (!data.status && Array.isArray(data)) {
+                templates = data;
+                data.forEach(t => {
+                    const vars = t.placeholders > 0 ? ` [${t.placeholders} var(s)]` : '';
+                    singleTemplate.innerHTML += `<option value="${t.id}">${t.name}${vars}</option>`;
+                });
+            }
+            singleTemplate.disabled = false;
+        }
+
+        function addDripStep() {
+            dripStepCounter++;
+            const stepNumber = dripBuilder.children.length + 1;
+            const stepHtml = `
+                <div class="drip-step" data-step="${dripStepCounter}">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="step-number">${stepNumber}</div>
+                        <button class="btn btn-remove" onclick="removeDripStep(${dripStepCounter})">
+                            <i class="fa-solid fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">WhatsApp Template</label>
+                        <select class="form-select drip-template" data-step="${dripStepCounter}">
+                            <option value="">Select Template</option>
+                            ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label small">Send After (Days)</label>
+                        <input type="number" class="form-control drip-delay" data-step="${dripStepCounter}" 
+                               min="0" value="${stepNumber === 1 ? 0 : stepNumber - 1}">
+                    </div>
+                </div>
+            `;
+            dripBuilder.insertAdjacentHTML('beforeend', stepHtml);
+            updateStepNumbers();
+            checkReadiness();
+        }
+
+        function removeDripStep(stepId) {
+            dripBuilder.querySelector(`[data-step="${stepId}"]`)?.remove();
+            updateStepNumbers();
+            checkReadiness();
+        }
+
+        function updateStepNumbers() {
+            dripBuilder.querySelectorAll('.drip-step').forEach((step, index) => {
+                step.querySelector('.step-number').textContent = index + 1;
+            });
+        }
+
+        function addAutoresponderMapping() {
+            const mappingHtml = `
+                <div class="mapping-row" data-mapping="${autoresponderStepCounter}">
+                    <label class="form-label small">
+                        <i class="fa-solid fa-envelope"></i> Email Step ${autoresponderStepCounter}
+                    </label>
+                    <select class="form-select autoresponder-template" data-mapping="${autoresponderStepCounter}">
+                        <option value="">Select WhatsApp Template</option>
+                        ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+            autoresponderMapping.insertAdjacentHTML('beforeend', mappingHtml);
+            autoresponderStepCounter++;
+            checkReadiness();
+        }
+
+        async function generateConfiguration() {
+            const mode = document.querySelector('.mode-card.active').dataset.mode;
+            const listId = listSelect.value;
+            const webhookUrlRoot = webhookUrlRootInput.value.trim().replace(/\/$/, '');
+            let config = { mode };
+            
+            if (mode === 'single') {
+                config.template_id = singleTemplate.value;
+            } else if (mode === 'drip_sequence') {
+                config.sequence = [];
+                dripBuilder.querySelectorAll('.drip-step').forEach(step => {
+                    const stepId = step.dataset.step;
+                    const template = step.querySelector(`.drip-template[data-step="${stepId}"]`).value;
+                    const delay = step.querySelector(`.drip-delay[data-step="${stepId}"]`).value;
+                    if (template && delay !== '') {
+                        config.sequence.push({
+                            template_id: template,
+                            delay_days: parseInt(delay),
+                            name: templates.find(t => t.id === template)?.name || 'Step'
+                        });
+                    }
+                });
+                if (config.sequence.length === 0) {
+                    showAlert('error', 'Please configure at least one drip step.');
+                    return;
+                }
+            } else if (mode === 'mirror_autoresponder') {
+                config.autoresponder_id = 'autoresponder_' + listId;
+                config.template_map = {};
+                autoresponderMapping.querySelectorAll('.mapping-row').forEach((row, index) => {
+                    const template = row.querySelector(`.autoresponder-template`).value;
+                    if (template) config.template_map[index + 1] = template;
+                });
+                if (Object.keys(config.template_map).length === 0) {
+                    showAlert('error', 'Please configure at least one mapping.');
+                    return;
+                }
+            }
+
+            generateButton.disabled = true;
+            generateButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating...';
+
+            const data = await apiCall('save_configuration', 'POST', {
+                list_id: listId,
+                webhook_url_root: webhookUrlRoot,
+                config: config
+            });
+
+            generateButton.disabled = false;
+            generateButton.innerHTML = '<i class="fa-solid fa-rocket"></i> Generate Webhook Configuration';
+
+            if (data.status === 'success') {
+                showSuccessResponse(data, mode, config);
+            } else {
+                showAlert('error', `Failed: ${data.message}`);
+            }
+        }
+
+        function showSuccessResponse(data, mode, config) {
+            let html = `<div class="alert alert-success mt-4">
+                <i class="fa-solid fa-circle-check"></i> Configuration Saved Successfully!
+            </div>`;
+            
+            html += `<div class="webhook-url-box"><strong>Subscribe Webhook:</strong><br>${data.webhook_url}</div>`;
+            html += `<button class="btn btn-copy" onclick="copyText('${data.webhook_url}')">
+                <i class="fa-solid fa-copy"></i> Copy Subscribe Webhook
+            </button>`;
+            
+            if (data.autoresponder_webhook_url) {
+                html += `<div class="webhook-url-box"><strong>Autoresponder Webhook:</strong><br>${data.autoresponder_webhook_url}</div>`;
+                html += `<button class="btn btn-copy" onclick="copyText('${data.autoresponder_webhook_url}')">
+                    <i class="fa-solid fa-copy"></i> Copy Autoresponder Webhook
+                </button>`;
+            }
+            
+            html += `<div class="instructions"><strong><i class="fa-solid fa-clipboard-list"></i> Next Steps:</strong>`;
+            html += `<ol class="mt-2 mb-0"><li>Copy the webhook URL(s) above</li>`;
+            html += `<li>Go to your Sendy dashboard and edit the list</li>`;
+            html += `<li>Paste in the Subscribe webhook field</li>`;
+            if (mode === 'drip_sequence') {
+                html += `<li>Set up cron: <code>*/15 * * * * php process_drip.php</code></li>`;
+            }
+            if (mode === 'mirror_autoresponder') {
+                html += `<li>In Sendy Settings → Rules, add autoresponder webhook</li>`;
+            }
+            html += `</ol></div>`;
+            
+            responseContainer.innerHTML = html;
+        }
+
+        function showAlert(type, message) {
+            const alertClass = type === 'error' ? 'alert-danger' : 'alert-warning';
+            responseContainer.innerHTML = `<div class="alert ${alertClass} mt-4">${message}</div>`;
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                setTimeout(() => {
+                    event.target.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
