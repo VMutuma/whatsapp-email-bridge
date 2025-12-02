@@ -15,7 +15,6 @@ require_once __DIR__ . '/lib/handlers/AutoresponderMirrorHandler.php';
 
 header('Content-Type: application/json');
 
-// WEBHOOK HANDLERS
 
 /**
  * Handle Sendy subscription webhook
@@ -138,9 +137,7 @@ function getHandlerForMode($mode) {
     }
 }
 
-// ====================================================================
 // API ENDPOINTS
-// ====================================================================
 
 /**
  * GET /webhook_api.php?action=brands
@@ -254,7 +251,7 @@ function handle_api_save_configuration() {
         return ['status' => 'error', 'message' => 'Failed to save configuration'];
     }
     
-    $webhookURL = rtrim($webhookUrlRoot, '/') . '/webhook_api.php?token=' . $token;
+    $webhookURL = rtrim($webhookUrlRoot, '/') . '/webhook_api.php?action=sendy_handler&token=' . $token;
     
     $autoresponderWebhookURL = null;
     if ($mode === 'mirror_autoresponder') {
@@ -350,7 +347,6 @@ function handle_api_list_webhooks() {
     return $result;
 }
 
-// MAIN ROUTER
 
 $action = $_GET['action'] ?? null;
 $response = null;

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Webhooks - WhatsApp Email Bridge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        :root {
+            --primary-color: #33B1BA;
+            --secondary-color: #F3A929;
+        }
+        body { 
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); 
+            padding: 40px 0; 
+            min-height: 100vh;
+        }
+        .navbar {
+            background: white;
+            padding: 16px 24px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar-nav {
+            display: flex;
+            gap: 16px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            background: #edf7f8;
+            color: var(--primary-color);
+        }
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        .webhook-card { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 24px; 
+            margin-bottom: 20px; 
+            border: 2px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        .webhook-card:hover { 
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(51, 177, 186, 0.1);
+        }
+        .token-badge { 
+            background: #edf7f8; 
+            color: var(--primary-color); 
+            padding: 4px 12px; 
+            border-radius: 6px; 
+            font-family: monospace; 
+            font-size: 13px; 
+        }
+        .mode-badge { 
+            padding: 4px 12px; 
+            border-radius: 6px; 
+            font-size: 12px; 
+            font-weight: 600; 
+        }
+        .mode-single { background: #dbeafe; color: #1e40af; }
+        .mode-drip_sequence { background: #fef3c7; color: #92400e; }
+        .mode-mirror_autoresponder { background: #e0e7ff; color: #3730a3; }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .empty-state i {
+            font-size: 64px;
+            color: #cbd5e0;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 1200px;">
+        <nav class="navbar">
+            <a href="index.html" class="navbar-brand">
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp Email Bridge
+            </a>
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-plus"></i> Create Webhook
+                </a></li>
+                <li><a href="webhooks.html" class="nav-link active">
+                    <i class="fa-solid fa-list"></i> Manage Webhooks
+                </a></li>
+            </ul>
+        </nav>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1><i class="fa-solid fa-webhook"></i> Webhook Management</h1>
+                <p class="text-muted">View and manage all configured webhooks</p>
+            </div>
+            <a href="index.html" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Create New Webhook
+            </a>
+        </div>
+
+        <div id="webhooksList">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-3">Loading webhooks...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PHP_API_FILE = 'webhook_api.php';
+
+        async function loadWebhooks() {
+            try {
+                const response = await fetch(`${PHP_API_FILE}?action=list_webhooks`);
+                const webhooks = await response.json();
+                displayWebhooks(webhooks);
+            } catch (error) {
+                document.getElementById('webhooksList').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fa-solid fa-exclamation-triangle"></i> 
+                        Failed to load webhooks: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function displayWebhooks(webhooks) {
+            const container = document.getElementById('webhooksList');
+            
+            if (webhooks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox"></i>
+                        <h4>No Webhooks Yet</h4>
+                        <p class="text-muted">Create your first webhook to get started</p>
+                        <a href="index.html" class="btn btn-primary mt-3">
+                            <i class="fa-solid fa-plus"></i> Create Webhook
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = webhooks.map(webhook => `
+                <div class="webhook-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-2">
+                                <i class="fa-solid fa-list text-primary"></i> 
+                                ${webhook.list_name}
+                            </h5>
+                            <div class="mb-2">
+                                <span class="token-badge">${webhook.token}</span>
+                                <span class="mode-badge mode-${webhook.mode} ms-2">
+                                    ${webhook.mode.replace('_', ' ')}
+                                </span>
+                            </div>
+                            <small class="text-muted">
+                                <i class="fa-solid fa-clock"></i> 
+                                Created: ${new Date(webhook.created_at * 1000).toLocaleString()}
+                            </small>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-primary" 
+                                        onclick="copyWebhook('${webhook.webhook_url}')">
+                                    <i class="fa-solid fa-copy"></i> Copy URL
+                                </button>
+                                <button class="btn btn-sm btn-outline-info" 
+                                        onclick="showWebhookDetails('${webhook.token}', '${webhook.webhook_url}')">
+                                    <i class="fa-solid fa-eye"></i> View
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function copyWebhook(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.target.closest('button');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
+
+        function showWebhookDetails(token, url) {
+            alert(`Webhook Details:\n\nToken: ${token}\n\nURL: ${url}\n\nFull configuration can be found in data/template_map.json`);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadWebhooks);
+    </script>
+</body>
+</html>
