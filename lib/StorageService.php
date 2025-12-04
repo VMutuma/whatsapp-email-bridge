@@ -28,10 +28,17 @@ class StorageService {
     public static function save($filepath, $data) {
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         
+        // Windows: Create file first if it doesn't exist
+        if (!file_exists($filepath)) {
+            touch($filepath);
+            chmod($filepath, 0666);
+        }
+        
         $result = file_put_contents($filepath, $json, LOCK_EX);
         
         if ($result === false) {
             error_log("Failed to save data to: $filepath");
+            error_log("Error: " . (error_get_last()['message'] ?? 'Unknown'));
             return false;
         }
         
@@ -102,21 +109,24 @@ class StorageService {
     /**
      * Generate unique token for webhook
      */
-
     public static function generateToken() {
         return bin2hex(random_bytes(8));
     }
+
+    // ==============================================
+    // WEBHOOK METHODS - USE WEBHOOKS_FILE
+    // ==============================================
 
     /**
      * Save webhook configuration with token
      */
     public static function saveWebhookConfig($token, $config) {
-        return self::update(TEMPLATE_MAP_FILE, function($map) use ($token, $config) {
-            if (!isset($map['webhooks'])) {
-                $map['webhooks'] = [];
-            }  
-            $map['webhooks'][$token] = $config;
-            return $map;
+        return self::update(WEBHOOKS_FILE, function($webhooks) use ($token, $config) {
+            if (!is_array($webhooks)) {
+                $webhooks = [];
+            }
+            $webhooks[$token] = $config;
+            return $webhooks;
         }, []);
     }
 
@@ -124,27 +134,26 @@ class StorageService {
      * Get webhook configuration by token
      */
     public static function getWebhookConfigByToken($token) {
-        $map = self::load(TEMPLATE_MAP_FILE, []);
-        return $map['webhooks'][$token] ?? null;
+        $webhooks = self::load(WEBHOOKS_FILE, []);
+        return $webhooks[$token] ?? null;
     }
 
     /**
      * Get all webhook configurations
      */
     public static function getAllWebhooks() {
-        $map = self::load(TEMPLATE_MAP_FILE, []);
-        return $map['webhooks'] ?? [];
+        return self::load(WEBHOOKS_FILE, []);
     }
 
     /**
      * Delete webhook configuration by token
      */
     public static function deleteWebhook($token) {
-        return self::update(TEMPLATE_MAP_FILE, function($map) use ($token) {
-            if (isset($map['webhooks'][$token])) {
-                unset($map['webhooks'][$token]);
+        return self::update(WEBHOOKS_FILE, function($webhooks) use ($token) {
+            if (isset($webhooks[$token])) {
+                unset($webhooks[$token]);
             }
-            return $map;
+            return $webhooks;
         }, []);
     }
 
@@ -152,7 +161,7 @@ class StorageService {
      * Check if token exists
      */
     public static function tokenExists($token) {
-        $map = self::load(TEMPLATE_MAP_FILE, []);
-        return isset($map['webhooks'][$token]);
+        $webhooks = self::load(WEBHOOKS_FILE, []);
+        return isset($webhooks[$token]);
     }
 }

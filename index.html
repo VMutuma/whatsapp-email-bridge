@@ -20,8 +20,10 @@
         :root {
             --primary-color: #33B1BA;
             --secondary-color: #F3A929;
+            --tertiary-color: #9C27B0;
             --primary-dark: #2a9aa2;
             --secondary-dark: #e09520;
+            --tertiary-dark: #7B1FA2;
         }
 
         * {
@@ -35,52 +37,52 @@
         }
 
         .navbar {
-    background: white;
-    padding: 16px 24px;
-    margin-bottom: 40px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+            background: white;
+            padding: 16px 24px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .navbar-brand {
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--primary-color);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+        .navbar-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .navbar-nav {
-        display: flex;
-        gap: 16px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
+        .navbar-nav {
+            display: flex;
+            gap: 16px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
 
-    .nav-link {
-        color: #4a5568;
-        text-decoration: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        transition: all 0.2s;
-        font-weight: 500;
-    }
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
 
-    .nav-link:hover {
-        background: #edf7f8;
-        color: var(--primary-color);
-    }
+        .nav-link:hover {
+            background: #edf7f8;
+            color: var(--primary-color);
+        }
 
-    .nav-link.active {
-        background: var(--primary-color);
-        color: white;
-    }
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
 
         .main-container {
             max-width: 900px;
@@ -191,6 +193,10 @@
         .mode-card.active .mode-icon {
             background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
         }
+
+        /* .mode-card[data-mode="hybrid_drip"].active .mode-icon {
+            background: linear-gradient(135deg, var(--tertiary-color) 0%, var(--tertiary-dark) 100%);
+        } */
 
         .mode-title {
             font-weight: 600;
@@ -325,25 +331,113 @@
             width: 16px;
             height: 16px;
         }
+
+        /* NEW: Time unit input group styling */
+        .input-group-time {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-group-time .form-control {
+            flex: 1;
+        }
+
+        .input-group-time .form-select {
+            flex: 0 0 140px;
+        }
+
+        .time-unit-badge {
+            background: #edf7f8;
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Hybrid specific styles */
+        .channel-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .channel-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #4a5568;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .channel-btn:hover {
+            border-color: var(--primary-color);
+            background: #f7fafc;
+        }
+
+        .channel-btn.active {
+            border-color: var(--primary-color);
+            background: #edf7f8;
+            color: var(--primary-color);
+        }
+
+        .channel-btn.whatsapp.active {
+            border-color: var(--primary-color);
+            background: #edf7f8;
+            color: var(--primary-color);
+        }
+
+        .channel-btn.email.active {
+            border-color: var(--tertiary-color);
+            background: #f3e5f5;
+            color: var(--tertiary-color);
+        }
+
+        .channel-icon {
+            font-size: 14px;
+        }
+
+        .email-subject-input {
+            margin-top: 12px;
+        }
+
+        .template-required {
+            color: #e53e3e;
+            font-size: 12px;
+            margin-left: 4px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-     <nav class="navbar">
-        <a href="index.html" class="navbar-brand">
-            <i class="fa-brands fa-whatsapp"></i>
-            WhatsApp Email Bridge
-        </a>
-        <ul class="navbar-nav">
-            <li><a href="index.html" class="nav-link active">
-                <i class="fa-solid fa-plus"></i> Create Webhook
-            </a></li>
-            <li><a href="webhooks.html" class="nav-link">
-                <i class="fa-solid fa-list"></i> Manage Webhooks
-            </a></li>
-        </ul>
-    </nav>
+        <nav class="navbar">
+            <a href="index.html" class="navbar-brand">
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp Email Bridge
+            </a>
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link active">
+                    <i class="fa-solid fa-plus"></i> Create Webhook
+                </a></li>
+                <li><a href="bulk_subscribe.html" class="nav-link">
+                   <i class="fa-solid fa-users"></i> Bulk Subscribe
+                </a></li>
+                <li><a href="webhooks.html" class="nav-link">
+                    <i class="fa-solid fa-list"></i> Manage Webhooks
+                </a></li>
+            </ul>
+           
+        </nav>
 
         <div class="main-container">
             <div class="header-section">
@@ -389,11 +483,23 @@
 
             <div class="mb-4">
                 <label class="form-label">
+                    <i class="fa-solid fa-signature"></i>
+                    4. Webhook Name
+                </label>
+                <input type="text" class="form-control" id="webhookName" 
+                    placeholder="e.g., Welcome Sequence for New Users">
+                <div class="info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Give this webhook a descriptive name to easily identify it later.
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">
                     <i class="fa-solid fa-sliders"></i>
                     4. Choose Drip Mode
                 </label>
                 <div class="row g-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mode-card active" data-mode="single">
                             <div class="d-flex align-items-center gap-3 mb-2">
                                 <div class="mode-icon">
@@ -406,7 +512,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mode-card" data-mode="drip_sequence">
                             <div class="d-flex align-items-center gap-3 mb-2">
                                 <div class="mode-icon">
@@ -419,7 +525,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mode-card" data-mode="mirror_autoresponder">
                             <div class="d-flex align-items-center gap-3 mb-2">
                                 <div class="mode-icon">
@@ -429,6 +535,19 @@
                             </div>
                             <p class="mode-description">
                                 Send WhatsApp messages in sync with Sendy email autoresponders.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mode-card" data-mode="hybrid_drip">
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <div class="mode-icon">
+                                    <i class="fa-solid fa-code-branch"></i>
+                                </div>
+                                <h6 class="mode-title">Hybrid Drip</h6>
+                            </div>
+                            <p class="mode-description">
+                                Alternate between Email and WhatsApp messages in a unified sequence.
                             </p>
                         </div>
                     </div>
@@ -450,6 +569,11 @@
                     <i class="fa-solid fa-list-check"></i>
                     5. Build Your Drip Sequence
                 </label>
+                <div class="info-box mb-3">
+                    <i class="fa-solid fa-clock"></i>
+                    <strong>Flexible Timing:</strong> Set delays in minutes, hours, days, weeks, or months. 
+                    Perfect for quick follow-ups or long-term nurture campaigns!
+                </div>
                 <div class="drip-builder" id="dripBuilder"></div>
                 <button class="btn btn-add-step mt-3" onclick="addDripStep()">
                     <i class="fa-solid fa-plus"></i> Add Step
@@ -471,6 +595,22 @@
                 </button>
             </div>
 
+            <div id="hybridConfig" class="mb-4 d-none">
+                <label class="form-label">
+                    <i class="fa-solid fa-code-branch"></i>
+                    5. Build Hybrid Email + WhatsApp Sequence
+                </label>
+                <div class="info-box mb-3">
+                    <i class="fa-solid fa-shuffle"></i>
+                    <strong>Unified Campaign:</strong> Create sequences that alternate between Email and WhatsApp messages. 
+                    Example: Email → WhatsApp (2h) → Email (1d) → WhatsApp (3d)
+                </div>
+                <div class="drip-builder" id="hybridBuilder"></div>
+                <button class="btn btn-add-step mt-3" onclick="addHybridStep()">
+                    <i class="fa-solid fa-plus"></i> Add Step
+                </button>
+            </div>
+
             <button class="btn btn-primary-custom" id="generateButton" disabled onclick="generateConfiguration()">
                 <i class="fa-solid fa-rocket"></i>
                 Generate Webhook Configuration
@@ -487,6 +627,7 @@
         let templates = [];
         let dripStepCounter = 0;
         let autoresponderStepCounter = 1;
+        let hybridStepCounter = 0;
 
         const brandSelect = document.getElementById('brandSelect');
         const listSelect = document.getElementById('listSelect');
@@ -497,8 +638,10 @@
         const singleConfig = document.getElementById('singleConfig');
         const dripConfig = document.getElementById('dripConfig');
         const mirrorConfig = document.getElementById('mirrorConfig');
+        const hybridConfig = document.getElementById('hybridConfig');
         const dripBuilder = document.getElementById('dripBuilder');
         const autoresponderMapping = document.getElementById('autoresponderMapping');
+        const hybridBuilder = document.getElementById('hybridBuilder');
 
         document.addEventListener('DOMContentLoaded', initializeUI);
 
@@ -541,6 +684,7 @@
             singleConfig.classList.add('d-none');
             dripConfig.classList.add('d-none');
             mirrorConfig.classList.add('d-none');
+            hybridConfig.classList.add('d-none');
             
             if (mode === 'single') {
                 singleConfig.classList.remove('d-none');
@@ -550,6 +694,9 @@
             } else if (mode === 'mirror_autoresponder') {
                 mirrorConfig.classList.remove('d-none');
                 if (autoresponderMapping.children.length === 0) addAutoresponderMapping();
+            } else if (mode === 'hybrid_drip') {
+                hybridConfig.classList.remove('d-none');
+                if (hybridBuilder.children.length === 0) addHybridStep();
             }
             checkReadiness();
         }
@@ -564,6 +711,8 @@
                 ready = ready && dripBuilder.children.length > 0;
             } else if (mode === 'mirror_autoresponder') {
                 ready = ready && autoresponderMapping.children.length > 0;
+            } else if (mode === 'hybrid_drip') {
+                ready = ready && hybridBuilder.children.length > 0;
             }
             generateButton.disabled = !ready;
         }
@@ -614,6 +763,22 @@
         function addDripStep() {
             dripStepCounter++;
             const stepNumber = dripBuilder.children.length + 1;
+            
+            // Smart default values based on step number
+            let defaultDelay = 0;
+            let defaultUnit = 'minutes';
+            
+            if (stepNumber === 1) {
+                defaultDelay = 0;
+                defaultUnit = 'minutes';
+            } else if (stepNumber === 2) {
+                defaultDelay = 1;
+                defaultUnit = 'hours';
+            } else {
+                defaultDelay = stepNumber - 1;
+                defaultUnit = 'days';
+            }
+            
             const stepHtml = `
                 <div class="drip-step" data-step="${dripStepCounter}">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -623,31 +788,48 @@
                         </button>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small">WhatsApp Template</label>
+                        <label class="form-label small">
+                            <i class="fa-brands fa-whatsapp"></i> WhatsApp Template
+                        </label>
                         <select class="form-select drip-template" data-step="${dripStepCounter}">
                             <option value="">Select Template</option>
                             ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
                         </select>
                     </div>
                     <div>
-                        <label class="form-label small">Send After (Days)</label>
-                        <input type="number" class="form-control drip-delay" data-step="${dripStepCounter}" 
-                               min="0" value="${stepNumber === 1 ? 0 : stepNumber - 1}">
+                        <label class="form-label small">
+                            <i class="fa-solid fa-clock"></i> Send After
+                        </label>
+                        <div class="input-group-time">
+                            <input type="number" class="form-control drip-delay" data-step="${dripStepCounter}" 
+                                   min="0" value="${defaultDelay}" placeholder="0">
+                            <select class="form-select drip-unit" data-step="${dripStepCounter}">
+                                <option value="minutes" ${defaultUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
+                                <option value="hours" ${defaultUnit === 'hours' ? 'selected' : ''}>Hours</option>
+                                <option value="days" ${defaultUnit === 'days' ? 'selected' : ''}>Days</option>
+                                <option value="weeks" ${defaultUnit === 'weeks' ? 'selected' : ''}>Weeks</option>
+                                <option value="months" ${defaultUnit === 'months' ? 'selected' : ''}>Months</option>
+                            </select>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fa-solid fa-info-circle"></i> 
+                            Delay from previous step (or subscription for first step)
+                        </small>
                     </div>
                 </div>
             `;
             dripBuilder.insertAdjacentHTML('beforeend', stepHtml);
-            updateStepNumbers();
+            updateDripStepNumbers();
             checkReadiness();
         }
 
         function removeDripStep(stepId) {
             dripBuilder.querySelector(`[data-step="${stepId}"]`)?.remove();
-            updateStepNumbers();
+            updateDripStepNumbers();
             checkReadiness();
         }
 
-        function updateStepNumbers() {
+        function updateDripStepNumbers() {
             dripBuilder.querySelectorAll('.drip-step').forEach((step, index) => {
                 step.querySelector('.step-number').textContent = index + 1;
             });
@@ -670,10 +852,139 @@
             checkReadiness();
         }
 
+        function addHybridStep() {
+            hybridStepCounter++;
+            const stepNumber = hybridBuilder.children.length + 1;
+            
+            // Smart default values based on step number
+            let defaultDelay = 0;
+            let defaultUnit = 'minutes';
+            let defaultChannel = stepNumber % 2 === 1 ? 'whatsapp' : 'email';
+            
+            if (stepNumber === 1) {
+                defaultDelay = 0;
+                defaultUnit = 'minutes';
+            } else if (stepNumber === 2) {
+                defaultDelay = 2;
+                defaultUnit = 'hours';
+            } else {
+                defaultDelay = stepNumber - 1;
+                defaultUnit = 'days';
+            }
+            
+            const stepHtml = `
+                <div class="drip-step" data-hybrid-step="${hybridStepCounter}">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="step-number">${stepNumber}</div>
+                        <button class="btn btn-remove" onclick="removeHybridStep(${hybridStepCounter})">
+                            <i class="fa-solid fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    
+                    <div class="channel-selector mb-3">
+                        <button type="button" class="channel-btn whatsapp ${defaultChannel === 'whatsapp' ? 'active' : ''}" 
+                                onclick="setHybridChannel(${hybridStepCounter}, 'whatsapp')">
+                            <i class="fa-brands fa-whatsapp channel-icon"></i>
+                            WhatsApp
+                        </button>
+                        <button type="button" class="channel-btn email ${defaultChannel === 'email' ? 'active' : ''}" 
+                                onclick="setHybridChannel(${hybridStepCounter}, 'email')">
+                            <i class="fa-solid fa-envelope channel-icon"></i>
+                            Email
+                        </button>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label small">
+                            <i class="fa-solid fa-heading"></i> Step Name
+                        </label>
+                        <input type="text" class="form-control hybrid-step-name" 
+                               data-step="${hybridStepCounter}" 
+                               placeholder="e.g., Welcome Message, Follow-up, Offer">
+                    </div>
+                    
+                    <div id="whatsappConfig-${hybridStepCounter}" class="${defaultChannel === 'whatsapp' ? '' : 'd-none'}">
+                        <label class="form-label small">
+                            <i class="fa-brands fa-whatsapp"></i> WhatsApp Template
+                            <span class="template-required">*</span>
+                        </label>
+                        <select class="form-select hybrid-whatsapp-template" data-step="${hybridStepCounter}">
+                            <option value="">Select Template</option>
+                            ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    
+                    <div id="emailConfig-${hybridStepCounter}" class="${defaultChannel === 'email' ? '' : 'd-none'}">
+                        <label class="form-label small">
+                            <i class="fa-solid fa-envelope"></i> Email Subject
+                            <span class="template-required">*</span>
+                        </label>
+                        <input type="text" class="form-control hybrid-email-subject" 
+                               data-step="${hybridStepCounter}" 
+                               placeholder="e.g., Welcome to our newsletter!">
+                    </div>
+                    
+                    <div class="mt-3">
+                        <label class="form-label small">
+                            <i class="fa-solid fa-clock"></i> Send After
+                        </label>
+                        <div class="input-group-time">
+                            <input type="number" class="form-control hybrid-delay" data-step="${hybridStepCounter}" 
+                                   min="0" value="${defaultDelay}" placeholder="0">
+                            <select class="form-select hybrid-unit" data-step="${hybridStepCounter}">
+                                <option value="minutes" ${defaultUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
+                                <option value="hours" ${defaultUnit === 'hours' ? 'selected' : ''}>Hours</option>
+                                <option value="days" ${defaultUnit === 'days' ? 'selected' : ''}>Days</option>
+                                <option value="weeks" ${defaultUnit === 'weeks' ? 'selected' : ''}>Weeks</option>
+                                <option value="months" ${defaultUnit === 'months' ? 'selected' : ''}>Months</option>
+                            </select>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fa-solid fa-info-circle"></i> 
+                            Delay from previous step (or subscription for first step)
+                        </small>
+                    </div>
+                </div>
+            `;
+            hybridBuilder.insertAdjacentHTML('beforeend', stepHtml);
+            updateHybridStepNumbers();
+            checkReadiness();
+        }
+
+        function removeHybridStep(stepId) {
+            hybridBuilder.querySelector(`[data-hybrid-step="${stepId}"]`)?.remove();
+            updateHybridStepNumbers();
+            checkReadiness();
+        }
+
+        function updateHybridStepNumbers() {
+            hybridBuilder.querySelectorAll('.drip-step').forEach((step, index) => {
+                step.querySelector('.step-number').textContent = index + 1;
+            });
+        }
+
+        function setHybridChannel(stepId, channel) {
+            const stepElement = hybridBuilder.querySelector(`[data-hybrid-step="${stepId}"]`);
+            if (!stepElement) return;
+            
+            // Update button states
+            stepElement.querySelectorAll('.channel-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            stepElement.querySelector(`.channel-btn.${channel}`).classList.add('active');
+            
+            // Show/hide configuration sections
+            stepElement.querySelector(`#whatsappConfig-${stepId}`).classList.toggle('d-none', channel !== 'whatsapp');
+            stepElement.querySelector(`#emailConfig-${stepId}`).classList.toggle('d-none', channel !== 'email');
+            
+            checkReadiness();
+        }
+
         async function generateConfiguration() {
             const mode = document.querySelector('.mode-card.active').dataset.mode;
             const listId = listSelect.value;
-            const listName = listSelect.options[listSelect.selectedIndex].text; // Get list name
+            const listName = listSelect.options[listSelect.selectedIndex].text;
+            const webhookName = document.getElementById('webhookName').value;
             const webhookUrlRoot = webhookUrlRootInput.value.trim().replace(/\/$/, '');
             let config = { mode };
             
@@ -685,11 +996,14 @@
                     const stepId = step.dataset.step;
                     const template = step.querySelector(`.drip-template[data-step="${stepId}"]`).value;
                     const delay = step.querySelector(`.drip-delay[data-step="${stepId}"]`).value;
+                    const unit = step.querySelector(`.drip-unit[data-step="${stepId}"]`).value;
+                    
                     if (template && delay !== '') {
                         config.sequence.push({
                             template_id: template,
-                            delay_days: parseInt(delay),
-                            name: templates.find(t => t.id === template)?.name || 'Step'
+                            delay: parseInt(delay),
+                            delay_unit: unit,
+                            name: templates.find(t => t.id == template)?.name || 'Step'
                         });
                     }
                 });
@@ -708,6 +1022,64 @@
                     showAlert('error', 'Please configure at least one mapping.');
                     return;
                 }
+            } else if (mode === 'hybrid_drip') {
+                config.sequence = [];
+                hybridBuilder.querySelectorAll('.drip-step').forEach(step => {
+                    const stepId = step.dataset.hybridStep;
+                    const channel = step.querySelector('.channel-btn.whatsapp.active') ? 'whatsapp' : 'email';
+                    const stepName = step.querySelector(`.hybrid-step-name[data-step="${stepId}"]`).value;
+                    const delay = step.querySelector(`.hybrid-delay[data-step="${stepId}"]`).value;
+                    const unit = step.querySelector(`.hybrid-unit[data-step="${stepId}"]`).value;
+                    
+                    if (!delay || delay === '') {
+                        showAlert('error', 'Please enter a delay for all hybrid steps.');
+                        return;
+                    }
+                    
+                    const stepConfig = {
+                        channel: channel,
+                        delay: parseInt(delay),
+                        delay_unit: unit,
+                        name: stepName || `${channel} Step`
+                    };
+                    
+                    if (channel === 'whatsapp') {
+                        const template = step.querySelector(`.hybrid-whatsapp-template[data-step="${stepId}"]`).value;
+                        if (!template) {
+                            showAlert('error', 'Please select a WhatsApp template for WhatsApp steps.');
+                            return;
+                        }
+                        stepConfig.template_id = template;
+                    } else {
+                        const subject = step.querySelector(`.hybrid-email-subject[data-step="${stepId}"]`).value;
+                        if (!subject) {
+                            showAlert('error', 'Please enter an email subject for Email steps.');
+                            return;
+                        }
+                        stepConfig.subject = subject;
+                    }
+                    
+                    config.sequence.push(stepConfig);
+                });
+                
+                if (config.sequence.length === 0) {
+                    showAlert('error', 'Please configure at least one hybrid step.');
+                    return;
+                }
+                
+                // Validate we have both email and WhatsApp steps
+                const whatsappSteps = config.sequence.filter(s => s.channel === 'whatsapp').length;
+                const emailSteps = config.sequence.filter(s => s.channel === 'email').length;
+                
+                if (whatsappSteps === 0) {
+                    showAlert('error', 'Hybrid sequence must include at least one WhatsApp step.');
+                    return;
+                }
+                
+                if (emailSteps === 0) {
+                    showAlert('error', 'Hybrid sequence must include at least one Email step.');
+                    return;
+                }
             }
 
             generateButton.disabled = true;
@@ -715,7 +1087,8 @@
 
             const data = await apiCall('save_configuration', 'POST', {
                 list_id: listId,
-                list_name: listName,  // Send list name
+                list_name: listName,
+                webhook_name: webhookName || listName + ' - ' + mode, // Default name
                 webhook_url_root: webhookUrlRoot,
                 config: config
             });
@@ -739,8 +1112,7 @@
                 <strong>Subscribe Webhook:</strong><br>${data.webhook_url}
             </div>`;
             html += `<button class="btn btn-copy" onclick="copyText('${data.webhook_url}')">
-                <i class="fa-solid fa-copy"></i> Copy Subscribe Webhook
-            </button>`;
+                <i class="fa-solid fa-copy"></i> Copy Subscribe Webhook</button>`;
             
             if (data.autoresponder_webhook_url) {
                 html += `<div class="webhook-url-box">
@@ -768,6 +1140,19 @@
             
             if (mode === 'mirror_autoresponder') {
                 html += `<li>In Sendy Settings → Rules, add the autoresponder webhook above</li>`;
+            }
+            
+            if (mode === 'hybrid_drip') {
+                const whatsappSteps = config.sequence.filter(s => s.channel === 'whatsapp').length;
+                const emailSteps = config.sequence.filter(s => s.channel === 'email').length;
+                
+                html += `<li><strong>Hybrid Configuration:</strong> ${config.sequence.length} steps total 
+                    (${emailSteps} email, ${whatsappSteps} WhatsApp)</li>`;
+                html += `<li><strong>Important:</strong> Set up cron job to run every 15 minutes:
+                    <div class="webhook-url-box mt-2" style="font-size: 12px;">
+                        */15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_hybrid.php
+                    </div>
+                </li>`;
             }
             
             html += `</ol>

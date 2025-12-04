@@ -41,21 +41,21 @@ try {
     echo "- Pending messages: {$finalStats['pending_messages']}\n";
     
     if ($result['sent'] > 0) {
-        echo "\n✅ Successfully sent {$result['sent']} WhatsApp message(s)\n";
+        echo "\n Successfully sent {$result['sent']} WhatsApp message(s)\n";
     }
     
     if ($result['failed'] > 0) {
-        echo "\n❌ {$result['failed']} message(s) failed (will retry next run)\n";
+        echo "\n {$result['failed']} message(s) failed (will retry next run)\n";
     }
     
     if ($result['processed'] === 0 && $initialStats['active'] > 0) {
-        echo "\n⏰ No messages due for sending yet (waiting for scheduled time)\n";
+        echo "\n No messages due for sending yet (waiting for scheduled time)\n";
     } else if ($initialStats['active'] === 0) {
-        echo "\n📭 No active drip sequences found\n";
+        echo "\n No active drip sequences found\n";
     }
     
 } catch (Exception $e) {
-    echo "❌ ERROR: " . $e->getMessage() . "\n";
+    echo " ERROR: " . $e->getMessage() . "\n";
     error_log("Drip processor fatal error: " . $e->getMessage());
     exit(1);
 }

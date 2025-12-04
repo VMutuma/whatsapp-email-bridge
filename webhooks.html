@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <style>
         * { font-family: 'Inter', sans-serif; }
         :root {
@@ -111,6 +112,9 @@
                 <li><a href="index.html" class="nav-link">
                     <i class="fa-solid fa-plus"></i> Create Webhook
                 </a></li>
+                <li><a href="bulk_subscribe.html" class="nav-link">
+                     <i class="fa-solid fa-users"></i> Bulk Subscribe
+                 </a></li>
                 <li><a href="webhooks.html" class="nav-link active">
                     <i class="fa-solid fa-list"></i> Manage Webhooks
                 </a></li>
@@ -154,58 +158,121 @@
         }
 
         function displayWebhooks(webhooks) {
-            const container = document.getElementById('webhooksList');
-            
-            if (webhooks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fa-solid fa-inbox"></i>
-                        <h4>No Webhooks Yet</h4>
-                        <p class="text-muted">Create your first webhook to get started</p>
-                        <a href="index.html" class="btn btn-primary mt-3">
-                            <i class="fa-solid fa-plus"></i> Create Webhook
-                        </a>
-                    </div>
-                `;
-                return;
-            }
+    const container = document.getElementById('webhooksList');
+    
+    if (webhooks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-inbox"></i>
+                <h4>No Webhooks Yet</h4>
+                <p class="text-muted">Create your first webhook to get started</p>
+                <a href="index.html" class="btn btn-primary mt-3">
+                    <i class="fa-solid fa-plus"></i> Create Webhook
+                </a>
+            </div>
+        `;
+        return;
+    }
 
-            container.innerHTML = webhooks.map(webhook => `
-                <div class="webhook-card">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h5 class="mb-2">
-                                <i class="fa-solid fa-list text-primary"></i> 
-                                ${webhook.list_name}
-                            </h5>
-                            <div class="mb-2">
-                                <span class="token-badge">${webhook.token}</span>
-                                <span class="mode-badge mode-${webhook.mode} ms-2">
-                                    ${webhook.mode.replace('_', ' ')}
-                                </span>
-                            </div>
-                            <small class="text-muted">
-                                <i class="fa-solid fa-clock"></i> 
-                                Created: ${new Date(webhook.created_at * 1000).toLocaleString()}
-                            </small>
+    container.innerHTML = webhooks.map(webhook => `
+        <div class="webhook-card" id="webhook-${webhook.token}">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-2">
+                        <i class="fa-solid fa-list text-primary"></i> 
+                        ${webhook.webhook_name || webhook.list_name}
+                    </h5>
+                    <div class="mb-2">
+                        <span class="token-badge">${webhook.token}</span>
+                        <span class="mode-badge mode-${webhook.mode} ms-2">
+                            ${webhook.mode.replace('_', ' ')}
+                        </span>
+                        ${webhook.webhook_name ? `<small class="text-muted ms-2">(${webhook.list_name})</small>` : ''}
+                    </div>
+                    <div class="small text-muted">
+                        <div>
+                            <i class="fa-solid fa-clock"></i> 
+                            Created: ${new Date(webhook.created_at * 1000).toLocaleString()}
                         </div>
-                        <div class="col-md-6 text-end">
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-primary" 
-                                        onclick="copyWebhook('${webhook.webhook_url}')">
-                                    <i class="fa-solid fa-copy"></i> Copy URL
-                                </button>
-                                <button class="btn btn-sm btn-outline-info" 
-                                        onclick="showWebhookDetails('${webhook.token}', '${webhook.webhook_url}')">
-                                    <i class="fa-solid fa-eye"></i> View
-                                </button>
-                            </div>
+                        <div>
+                            <i class="fa-solid fa-link"></i>
+                            <a href="#" onclick="copyWebhook('${webhook.webhook_url}'); return false;" 
+                               class="text-decoration-none">
+                                ${webhook.webhook_url.replace('https://', '').substring(0, 40)}...
+                            </a>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
+                <div class="col-md-4 text-end">
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-primary" 
+                                onclick="copyWebhook('${webhook.webhook_url}')">
+                            <i class="fa-solid fa-copy"></i> Copy
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" 
+                                onclick="showWebhookDetails('${webhook.token}', '${webhook.webhook_name || webhook.list_name}', '${webhook.mode}')">
+                            <i class="fa-solid fa-eye"></i> Details
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" 
+                                onclick="deleteWebhook('${webhook.token}', '${webhook.webhook_name || webhook.list_name}')">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
 
+function deleteWebhook(token, name) {
+    if (!confirm(`Are you sure you want to delete webhook "${name}"?\n\nThis will prevent new subscriptions from being processed.`)) {
+        return;
+    }
+    
+    const card = document.getElementById(`webhook-${token}`);
+    const originalHTML = card.innerHTML;
+    
+    card.innerHTML = `
+        <div class="text-center py-3">
+            <div class="spinner-border spinner-border-sm text-danger" role="status"></div>
+            <span class="ms-2">Deleting webhook...</span>
+        </div>
+    `;
+    
+    fetch(`${PHP_API_FILE}?action=delete_webhook&token=${token}`, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            card.style.opacity = '0.5';
+            setTimeout(() => {
+                card.remove();
+                // Check if we need to show empty state
+                const remaining = document.querySelectorAll('.webhook-card').length;
+                if (remaining === 0) {
+                    document.getElementById('webhooksList').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-inbox"></i>
+                            <h4>No Webhooks Found</h4>
+                            <p class="text-muted">All webhooks have been deleted</p>
+                            <a href="index.html" class="btn btn-primary mt-3">
+                                <i class="fa-solid fa-plus"></i> Create New Webhook
+                            </a>
+                        </div>
+                    `;
+                }
+            }, 300);
+        } else {
+            card.innerHTML = originalHTML;
+            alert(`Failed to delete webhook: ${data.message}`);
+        }
+    })
+    .catch(error => {
+        card.innerHTML = originalHTML;
+        alert(`Error: ${error.message}`);
+    });
+}
         function copyWebhook(url) {
             navigator.clipboard.writeText(url).then(() => {
                 const btn = event.target.closest('button');

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Subscribe | WhatsApp Email Bridge</title>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #33B1BA;
+            --secondary-color: #F3A929;
+            --primary-dark: #2a9aa2;
+            --secondary-dark: #e09520;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        .navbar {
+            background: white;
+            padding: 16px 24px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 16px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: #edf7f8;
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 48px;
+        }
+
+        .header-section {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 32px;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header-section h1 i {
+            color: var(--primary-color);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #718096;
+            margin: 0;
+        }
+
+        .card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            background: #fafbfc;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary-color);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(51, 177, 186, 0.1);
+        }
+
+        .info-box {
+            background: #edf7f8;
+            border-left: 4px solid var(--primary-color);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #2c5282;
+            margin-top: 15px;
+        }
+
+        .info-box i {
+            margin-right: 8px;
+        }
+
+        .file-upload-area {
+            border: 3px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 50px 20px;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .file-upload-area:hover, .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: #f0f9fa;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary-custom:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #238a91 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(51, 177, 186, 0.3);
+        }
+
+        .btn-primary-custom:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .alert-custom {
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .log-entry {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .log-date {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .log-file {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .preformatted {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+
+        .spinner-border-sm {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="navbar-brand">
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp Email Bridge
+            </a>
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-plus"></i> Create Webhook
+                </a></li>
+                <li><a href="bulk_subscribe.html" class="nav-link active">
+                    <i class="fa-solid fa-users"></i> Bulk Subscribe
+                </a></li>
+                <li><a href="webhooks.html" class="nav-link">
+                    <i class="fa-solid fa-list"></i> Manage Webhooks
+                </a></li>
+            </ul>
+        </nav>
+
+        <div class="main-container">
+            <div class="header-section">
+                <h1>
+                    <i class="fa-solid fa-users"></i>
+                    Bulk Subscribe to Sendy
+                </h1>
+                <p class="subtitle">Upload CSV files to bulk subscribe users to your Sendy email lists</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-list-check"></i>
+                    1. Select Target List
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Sendy Brand</label>
+                    <select class="form-select" id="brandSelect" onchange="loadLists()" disabled>
+                        <option value="">Loading brands...</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Sendy List</label>
+                    <select class="form-select" id="listSelect" onchange="updateSelectedList()" disabled>
+                        <option value="">Select a brand first</option>
+                    </select>
+                </div>
+
+                <div class="info-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <strong>CSV Format:</strong> First column must contain email addresses, second column can contain names (optional).
+                    Example: <code>john@example.com,John Doe</code>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-file-upload"></i>
+                    2. Upload CSV File
+                </div>
+
+                <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('csvFile').click()">
+                    <i class="fa-solid fa-cloud-arrow-up fa-3x mb-3" style="color: var(--primary-color);"></i>
+                    <h5>Click to select CSV file</h5>
+                    <p class="text-muted">or drag and drop here</p>
+                    <small class="text-muted">Maximum file size: 10MB</small>
+                </div>
+
+                <input type="file" id="csvFile" accept=".csv" class="d-none" onchange="handleFileSelect()">
+
+                <div id="fileInfo" class="mt-3"></div>
+            </div>
+
+            <button class="btn btn-primary-custom" id="processButton" onclick="processBulkUpload()" disabled>
+                <i class="fa-solid fa-rocket"></i>
+                Process Bulk Subscription
+            </button>
+
+            <div id="resultsContainer" class="mt-5"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const API_BASE = 'bulk_subscribe_api.php';
+        let selectedFile = null;
+        let selectedListId = '';
+        
+        // DOM Elements
+        const brandSelect = document.getElementById('brandSelect');
+        const listSelect = document.getElementById('listSelect');
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const csvFileInput = document.getElementById('csvFile');
+        const fileInfo = document.getElementById('fileInfo');
+        const processButton = document.getElementById('processButton');
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBrands();
+            setupDragAndDrop();
+        });
+
+        // Setup drag and drop
+        function setupDragAndDrop() {
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.add('dragover');
+            });
+
+            fileUploadArea.addEventListener('dragleave', function() {
+                fileUploadArea.classList.remove('dragover');
+            });
+
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileUploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        // Load available brands
+        async function loadBrands() {
+            try {
+                const response = await fetch(`${API_BASE}?action=get_brands`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    brandSelect.innerHTML = '<option value="">Select Brand</option>';
+                    data.brands.forEach(brand => {
+                        const option = document.createElement('option');
+                        option.value = brand.id;
+                        option.textContent = brand.name;
+                        brandSelect.appendChild(option);
+                    });
+                    brandSelect.disabled = false;
+                } else {
+                    showError('Failed to load brands: ' + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                showError('Network error loading brands: ' + error.message);
+            }
+        }
+
+        // Load lists for selected brand
+        async function loadLists() {
+            const brandId = brandSelect.value;
+            
+            if (!brandId) {
+                listSelect.innerHTML = '<option value="">Select a brand first</option>';
+                listSelect.disabled = true;
+                return;
+            }
+            
+            listSelect.disabled = true;
+            listSelect.innerHTML = '<option value="">Loading lists...</option>';
+            
+            try {
+                const response = await fetch(`${API_BASE}?action=get_lists&brand_id=${brandId}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    listSelect.innerHTML = '<option value="">Select List</option>';
+                    data.lists.forEach(list => {
+                        const option = document.createElement('option');
+                        option.value = list.id;
+                        option.textContent = list.name;
+                        listSelect.appendChild(option);
+                    });
+                    listSelect.disabled = false;
+                } else {
+                    showError('Failed to load lists: ' + (data.message || 'Unknown error'));
+                    listSelect.innerHTML = '<option value="">Error loading lists</option>';
+                }
+            } catch (error) {
+                showError('Network error loading lists: ' + error.message);
+                listSelect.innerHTML = '<option value="">Error loading lists</option>';
+            }
+        }
+
+        // Update selected list
+        function updateSelectedList() {
+            selectedListId = listSelect.value;
+            checkProcessButton();
+        }
+
+        // Handle file selection
+        function handleFileSelect() {
+            if (csvFileInput.files.length) {
+                handleFile(csvFileInput.files[0]);
+            }
+        }
+
+        // Handle file (from click or drag & drop)
+        function handleFile(file) {
+            // Validate file
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                showError('Please select a CSV file');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) { // 10MB
+                showError('File too large (max 10MB)');
+                return;
+            }
+            
+            selectedFile = file;
+            
+            // Show file info
+            fileInfo.innerHTML = `
+                <div class="alert alert-info">
+                    <i class="fa-solid fa-file-csv me-2"></i>
+                    <strong>${file.name}</strong> (${formatFileSize(file.size)})
+                    <br><small>Ready for upload</small>
+                </div>
+            `;
+            
+            checkProcessButton();
+        }
+
+        // Check if process button should be enabled
+        function checkProcessButton() {
+            const hasList = selectedListId && selectedListId.trim() !== '';
+            const hasFile = selectedFile !== null;
+            
+            processButton.disabled = !(hasList && hasFile);
+        }
+
+        // Process bulk upload
+        async function processBulkUpload() {
+            if (!selectedFile || !selectedListId) {
+                showError('Please select both a list and a CSV file');
+                return;
+            }
+            
+            // Disable button and show loading
+            processButton.disabled = true;
+            processButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Processing...';
+            
+            // Create FormData
+            const formData = new FormData();
+            formData.append('csv_file', selectedFile);
+            formData.append('list_id', selectedListId);
+            
+            try {
+                const response = await fetch(`${API_BASE}?action=bulk_upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                // Reset button
+                processButton.disabled = false;
+                processButton.innerHTML = '<i class="fa-solid fa-rocket"></i> Process Bulk Subscription';
+                
+                if (data.status === 'success') {
+                    showResults(data.results);
+                } else {
+                    showError(data.message || 'Upload failed');
+                }
+                
+            } catch (error) {
+                // Reset button
+                processButton.disabled = false;
+                processButton.innerHTML = '<i class="fa-solid fa-rocket"></i> Process Bulk Subscription';
+                
+                showError('Network error: ' + error.message);
+            }
+        }
+
+        // Show results
+        function showResults(results) {
+            let html = `
+                <div class="alert alert-success">
+                    <h4><i class="fa-solid fa-check-circle"></i> Bulk Subscription Complete!</h4>
+                    <p>Processed ${results.total || 0} records from your CSV file.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value text-success">${results.success || 0}</div>
+                        <div class="stat-label">Successfully Subscribed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value text-info">${results.already_subscribed || 0}</div>
+                        <div class="stat-label">Already Subscribed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value text-danger">${(results.failed_emails || []).length}</div>
+                        <div class="stat-label">Failed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${results.total || 0}</div>
+                        <div class="stat-label">Total Processed</div>
+                    </div>
+                </div>
+            `;
+            
+            // Show failed emails if any
+            if (results.failed_emails && results.failed_emails.length > 0) {
+                html += `
+                    <div class="alert alert-warning mt-4">
+                        <h5><i class="fa-solid fa-triangle-exclamation"></i> Failed Emails (${results.failed_emails.length})</h5>
+                        <div class="preformatted">${results.failed_emails.join('\n')}</div>
+                    </div>
+                `;
+            }
+            
+            // Show errors if any
+            if (results.errors && results.errors.length > 0) {
+                html += `
+                    <div class="alert alert-danger mt-3">
+                        <h5><i class="fa-solid fa-exclamation-circle"></i> Errors (${results.errors.length})</h5>
+                        <div class="preformatted">${results.errors.slice(0, 10).join('\n')}</div>
+                        ${results.errors.length > 10 ? `<small>... and ${results.errors.length - 10} more errors</small>` : ''}
+                    </div>
+                `;
+            }
+            
+            // Add action buttons
+            html += `
+                <div class="d-flex gap-3 mt-4">
+                    <button class="btn btn-primary-custom flex-grow-1" onclick="viewLogs()">
+                        <i class="fa-solid fa-history"></i> View Upload History
+                    </button>
+                    <button class="btn btn-primary-custom flex-grow-1" onclick="resetForm()" style="background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);">
+                        <i class="fa-solid fa-rotate-right"></i> New Upload
+                    </button>
+                </div>
+            `;
+            
+            resultsContainer.innerHTML = html;
+        }
+
+        // View upload logs
+        async function viewLogs() {
+            try {
+                const response = await fetch(`${API_BASE}?action=get_logs`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showLogs(data.logs);
+                } else {
+                    showError('Failed to load logs: ' + data.message);
+                }
+            } catch (error) {
+                showError('Network error loading logs: ' + error.message);
+            }
+        }
+
+        // Show logs
+        function showLogs(logs) {
+            if (!logs || logs.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fa-solid fa-info-circle"></i> No upload history found.
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="alert alert-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4><i class="fa-solid fa-history"></i> Upload History</h4>
+                        <button class="btn btn-sm btn-danger" onclick="clearLogs()">
+                            <i class="fa-solid fa-trash"></i> Clear All Logs
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            logs.forEach(log => {
+                const results = log.results || {};
+                html += `
+                    <div class="log-entry">
+                        <div class="log-header">
+                            <div class="log-date">${log.date || 'Unknown date'}</div>
+                            <div class="log-file">${log.file_name || 'Unknown file'}</div>
+                        </div>
+                        <div class="d-flex gap-2 mb-2">
+                            <span class="badge bg-success">${results.success || 0} subscribed</span>
+                            <span class="badge bg-info">${results.already_subscribed || 0} already</span>
+                            <span class="badge bg-danger">${(results.failed_emails || []).length} failed</span>
+                            <span class="badge bg-secondary">${results.total || 0} total</span>
+                        </div>
+                        <small class="text-muted">List ID: ${log.list_id || 'Unknown'}</small>
+                    </div>
+                `;
+            });
+            
+            resultsContainer.innerHTML = html;
+        }
+
+        // Clear logs
+        async function clearLogs() {
+            if (!confirm('Are you sure you want to clear all upload logs?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}?action=clear_logs`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showSuccess('All logs cleared successfully');
+                    resultsContainer.innerHTML = '';
+                } else {
+                    showError('Failed to clear logs: ' + data.message);
+                }
+            } catch (error) {
+                showError('Network error clearing logs: ' + error.message);
+            }
+        }
+
+        // Reset form for new upload
+        function resetForm() {
+            selectedFile = null;
+            selectedListId = '';
+            
+            csvFileInput.value = '';
+            fileInfo.innerHTML = '';
+            resultsContainer.innerHTML = '';
+            
+            listSelect.value = '';
+            
+            checkProcessButton();
+        }
+
+        // Helper functions
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        function showSuccess(message) {
+            resultsContainer.innerHTML = `
+                <div class="alert alert-success">
+                    <i class="fa-solid fa-check-circle"></i> ${message}
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            resultsContainer.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fa-solid fa-exclamation-circle"></i> ${message}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
