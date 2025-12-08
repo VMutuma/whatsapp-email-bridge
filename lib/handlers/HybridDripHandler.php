@@ -289,9 +289,6 @@ class HybridDripHandler implements WebhookHandlerInterface {
     /**
      * Send email via Sendy API
      */
-    /**
-     * Send email via Sendy API
-     */
     private static function sendEmailViaAPI($subscriber, $step) {
         $sendyUrl = defined('SENDY_URL') ? SENDY_URL : '';
         $sendyApiKey = defined('SENDY_API_KEY') ? SENDY_API_KEY : '';
