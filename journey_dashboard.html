@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Journey Dashboard - WhatsApp Bridge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        :root {
+            --primary-color: #33B1BA;
+            --secondary-color: #F3A929;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+        }
+        body { 
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); 
+            padding: 40px 0; 
+        }
+        .navbar {
+            background: white;
+            padding: 16px 24px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar-nav {
+            display: flex;
+            gap: 16px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            background: #edf7f8;
+            color: var(--primary-color);
+        }
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .stat-label {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .journey-stage {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .stage-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .stage-stats {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+        }
+        .stage-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .success-badge {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .fail-badge {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .recent-activity {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        .activity-time {
+            font-size: 12px;
+            color: #a0aec0;
+        }
+        .webhook-setup {
+            background: #fffbeb;
+            border: 2px solid #fbbf24;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .btn-copy {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-copy:hover {
+            background: #e09520;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 1400px;">
+        <nav class="navbar">
+            <a href="index.html" class="navbar-brand">
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp Email Bridge
+            </a>
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-plus"></i> Create Webhook
+                </a></li>
+                <li><a href="bulk_subscribe.html" class="nav-link">
+                    <i class="fa-solid fa-users"></i> Bulk Subscribe
+                </a></li>
+                <li><a href="webhooks.html" class="nav-link">
+                    <i class="fa-solid fa-list"></i> Manage Webhooks
+                </a></li>
+                <li><a href="journey_dashboard.html" class="nav-link active">
+                    <i class="fa-solid fa-route"></i> Journey Dashboard
+                </a></li>
+            </ul>
+        </nav>
+
+        <div class="webhook-setup">
+            <h5><i class="fa-solid fa-info-circle"></i> Zoho Webhook Setup Required</h5>
+            <p class="mb-2">Configure this webhook URL in your Zoho CRM:</p>
+            <div class="code-block" id="webhookUrl">Loading...</div>
+            <button class="btn-copy" onclick="copyWebhookUrl()">
+                <i class="fa-solid fa-copy"></i> Copy Webhook URL
+            </button>
+            <div class="mt-3">
+                <small>
+                    <strong>Setup:</strong> Zoho CRM → Settings → Automation → Webhooks → 
+                    Create webhook triggered on Contact/Lead/Deal updates
+                </small>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTransitions">-</div>
+                    <div class="stat-label">Total Journey Transitions</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number text-success" id="successRate">-</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="activeJourneys">-</div>
+                    <div class="stat-label">Active Journey Stages</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="todayTransitions">-</div>
+                    <div class="stat-label">Today's Transitions</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="stat-card">
+                    <h5 class="mb-4">
+                        <i class="fa-solid fa-chart-line"></i> Journey Stage Performance
+                    </h5>
+                    <div id="stagesList">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary"></div>
+                            <p class="mt-3">Loading journey data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="recent-activity">
+                    <h5 class="mb-4">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Recent Activity
+                    </h5>
+                    <div id="recentActivity">
+                        <div class="text-center py-3">
+                            <div class="spinner-border spinner-border-sm text-primary"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="stat-card">
+                    <h5 class="mb-4">
+                        <i class="fa-solid fa-cog"></i> Journey Configuration
+                    </h5>
+                    <div id="journeyConfig">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const JOURNEY_API = 'zoho_journey_bridge.php';
+
+        // Set webhook URL
+        document.getElementById('webhookUrl').textContent = 
+            window.location.origin + window.location.pathname.replace('journey_dashboard.html', '') + 
+            JOURNEY_API + '?action=zoho_journey';
+
+        function copyWebhookUrl() {
+            const url = document.getElementById('webhookUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.target.closest('button');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${JOURNEY_API}?action=journey_analytics`);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    displayAnalytics(data.analytics);
+                }
+            } catch (error) {
+                console.error('Failed to load analytics:', error);
+            }
+        }
+
+        async function loadJourneyConfig() {
+            try {
+                const response = await fetch(`${JOURNEY_API}?action=journey_config`);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    displayJourneyConfig(data.journeys);
+                }
+            } catch (error) {
+                console.error('Failed to load config:', error);
+            }
+        }
+
+        function displayAnalytics(analytics) {
+            // Update stats
+            document.getElementById('totalTransitions').textContent = analytics.total_transitions;
+            document.getElementById('successRate').textContent = analytics.success_rate + '%';
+            document.getElementById('activeJourneys').textContent = Object.keys(analytics.by_stage).length;
+
+            // Calculate today's transitions
+            const today = new Date().toDateString();
+            const todayCount = analytics.recent_transitions.filter(t => 
+                new Date(t.date).toDateString() === today
+            ).length;
+            document.getElementById('todayTransitions').textContent = todayCount;
+
+            // Display stage performance
+            const stagesList = document.getElementById('stagesList');
+            if (Object.keys(analytics.by_stage).length === 0) {
+                stagesList.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fa-solid fa-inbox" style="font-size: 48px; color: #cbd5e0;"></i>
+                        <p class="text-muted mt-3">No journey transitions yet</p>
+                        <small>Transitions will appear here when contacts move through journey stages</small>
+                    </div>
+                `;
+                return;
+            }
+
+            stagesList.innerHTML = '';
+            for (const [stage, stats] of Object.entries(analytics.by_stage)) {
+                const successRate = stats.count > 0 ? ((stats.success / stats.count) * 100).toFixed(1) : 0;
+                
+                stagesList.innerHTML += `
+                    <div class="journey-stage">
+                        <div class="stage-name">
+                            <i class="fa-solid fa-arrow-right text-primary"></i> 
+                            ${stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </div>
+                        <div class="stage-stats">
+                            <div class="stage-stat">
+                                <strong>${stats.count}</strong> transitions
+                            </div>
+                            <div class="stage-stat">
+                                <span class="success-badge">${stats.success} success</span>
+                            </div>
+                            <div class="stage-stat">
+                                <span class="fail-badge">${stats.failed} failed</span>
+                            </div>
+                            <div class="stage-stat">
+                                <strong>${successRate}%</strong> success rate
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Display recent activity
+            const recentActivity = document.getElementById('recentActivity');
+            if (analytics.recent_transitions.length === 0) {
+                recentActivity.innerHTML = '<p class="text-muted text-center">No recent activity</p>';
+                return;
+            }
+
+            recentActivity.innerHTML = '';
+            analytics.recent_transitions.forEach(activity => {
+                const statusIcon = activity.status === 'success' 
+                    ? '<i class="fa-solid fa-check-circle text-success"></i>'
+                    : '<i class="fa-solid fa-exclamation-circle text-danger"></i>';
+                
+                recentActivity.innerHTML += `
+                    <div class="activity-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div>${statusIcon} <strong>${activity.email}</strong></div>
+                                <div class="small text-muted">${activity.journey_stage.replace(/_/g, ' ')}</div>
+                            </div>
+                            <div class="activity-time">${new Date(activity.date).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function displayJourneyConfig(journeys) {
+            const configDiv = document.getElementById('journeyConfig');
+            configDiv.innerHTML = `
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Journey Stage</th>
+                                <th>Zoho Trigger Field</th>
+                                <th>Trigger Value</th>
+                                <th>Campaign Token</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Object.entries(journeys).map(([stage, config]) => `
+                                <tr>
+                                    <td><strong>${stage.replace(/_/g, ' ')}</strong></td>
+                                    <td><code>${config.zoho_field}</code></td>
+                                    <td><span class="badge bg-primary">${config.zoho_value}</span></td>
+                                    <td><code class="small">${config.campaign_token}</code></td>
+                                    <td class="small">${config.description}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAnalytics();
+            loadJourneyConfig();
+
+            // Refresh every 30 seconds
+            setInterval(loadAnalytics, 30000);
+        });
+    </script>
+</body>
+</html>
