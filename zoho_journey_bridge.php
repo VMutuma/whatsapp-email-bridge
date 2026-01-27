@@ -1,14 +1,6 @@
 <?php
 /**
  * Zoho Customer Journey WhatsApp Bridge
- * 
- * Strategy: Journey-Based Webhooks + Stage Mapping
- * 
- * This is the BEST approach for Zoho CRM customer journey integration because:
- * 1. Real-time triggers when contacts move between stages
- * 2. Each journey stage has its own WhatsApp sequence
- * 3. Automatic re-engagement based on CRM updates
- * 4. No polling needed - instant webhook responses
  */
 
 require_once __DIR__ . '/config.php';
@@ -17,96 +9,156 @@ require_once __DIR__ . '/lib/BeemService.php';
 
 header('Content-Type: application/json');
 
-/**
- * CUSTOMER JOURNEY CONFIGURATION
- * Map your Zoho CRM stages to WhatsApp campaigns
- */
 class CustomerJourneyMapper {
     
-    /**
-     * Define journey stages and their corresponding WhatsApp sequences
-     * Customize these based on YOUR customer journey
-     */
     private static $journeyMap = [
         
-        // STAGE 1: NEW LEAD (Just entered CRM)
-        'new_lead' => [
+        
+        /**
+         * TRIAL - MOJA PRODUCT
+         * When lead signs up for Moja trial
+         */
+        'trial_moja' => [
             'zoho_field' => 'Lead_Status',
-            'zoho_value' => 'New',
-            'campaign_token' => 'TOKEN_NEW_LEAD_WELCOME',
-            'description' => 'Welcome sequence for brand new leads'
+            'zoho_value' => 'Trial - Moja',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',  // ← Update after creating campaign
+            'description' => 'Moja trial onboarding and conversion'
         ],
         
-        // STAGE 2: CONTACTED (Sales team reached out)
-        'contacted' => [
+        /**
+         * QUALIFIED PROSPECT
+         * Lead shows genuine interest
+         */
+        'qualified_prospect' => [
             'zoho_field' => 'Lead_Status',
-            'zoho_value' => 'Contacted',
-            'campaign_token' => 'TOKEN_CONTACTED_FOLLOWUP',
-            'description' => 'Follow-up after initial contact'
+            'zoho_value' => 'Qualified Prospect',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Nurture qualified prospects'
         ],
         
-        // STAGE 3: QUALIFIED (Lead shows interest)
-        'qualified' => [
+        /**
+         * EVALUATION STAGE
+         * Lead is evaluating your solution
+         */
+        'evaluation' => [
             'zoho_field' => 'Lead_Status',
-            'zoho_value' => 'Qualified',
-            'campaign_token' => 'TOKEN_QUALIFIED_NURTURE',
-            'description' => 'Nurture sequence for qualified leads'
+            'zoho_value' => 'Evaluation',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Support during evaluation phase'
         ],
         
-        // STAGE 4: PROPOSAL SENT (Waiting for decision)
-        'proposal_sent' => [
-            'zoho_field' => 'Deal_Stage',
-            'zoho_value' => 'Proposal Sent',
-            'campaign_token' => 'TOKEN_PROPOSAL_FOLLOWUP',
-            'description' => 'Gentle reminders after proposal'
+        /**
+         * NEGOTIATION STAGE
+         * Deal in negotiation
+         */
+        'negotiation' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Negotiation',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Close the deal - negotiation support'
         ],
         
-        // STAGE 5: NEW CUSTOMER (Deal won!)
-        'new_customer' => [
-            'zoho_field' => 'Deal_Stage',
+        /**
+         * CLOSED WON - New Customer!
+         * Deal won, now onboard
+         */
+        'closed_won' => [
+            'zoho_field' => 'Lead_Status',
             'zoho_value' => 'Closed Won',
-            'campaign_token' => 'TOKEN_ONBOARDING',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
             'description' => 'Customer onboarding sequence'
         ],
         
-        // STAGE 6: ACTIVE CUSTOMER (Using product/service)
-        'active_customer' => [
-            'zoho_field' => 'Customer_Status',
-            'zoho_value' => 'Active',
-            'campaign_token' => 'TOKEN_ENGAGEMENT',
-            'description' => 'Regular engagement messages'
+        /**
+         * TRIAL - NON-MOJA PRODUCT
+         * When lead signs up for other product trial
+         */
+        'trial_non_moja' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Trial - Non-Moja',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Non-Moja trial onboarding'
         ],
         
-        // STAGE 7: AT-RISK (Showing churn signals)
-        'at_risk' => [
-            'zoho_field' => 'Customer_Health',
-            'zoho_value' => 'At Risk',
-            'campaign_token' => 'TOKEN_RETENTION',
-            'description' => 'Win-back campaign for at-risk customers'
+        
+        /**
+         * CONTACT IN FUTURE - MOJA
+         * Not ready now, but interested in Moja
+         */
+        'future_contact_moja' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Contact in Future - Moja',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Long-term nurture for future Moja customers'
         ],
         
-        // STAGE 8: CHURNED (Lost customer)
-        'churned' => [
-            'zoho_field' => 'Customer_Status',
-            'zoho_value' => 'Churned',
-            'campaign_token' => 'TOKEN_WINBACK',
-            'description' => 'Re-engagement for churned customers'
+        /**
+         * CONTACT IN FUTURE - NON-MOJA
+         * Not ready now, interested in other products
+         */
+        'future_contact_non_moja' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Contact in Future - Non-Moja',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Long-term nurture for other products'
         ],
         
-        // CUSTOM STAGES (Add your own)
-        'free_trial' => [
-            'zoho_field' => 'Account_Type',
-            'zoho_value' => 'Free Trial',
-            'campaign_token' => 'TOKEN_TRIAL_CONVERSION',
-            'description' => 'Convert free trial to paid'
+        /**
+         * UNQUALIFIED LEAD
+         * Lead doesn't meet criteria
+         */
+        'unqualified_lead' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Unqualified Lead',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Educational content, may re-qualify later'
         ],
         
-        'vip_customer' => [
-            'zoho_field' => 'Customer_Tier',
-            'zoho_value' => 'VIP',
-            'campaign_token' => 'TOKEN_VIP_TREATMENT',
-            'description' => 'VIP customer exclusive updates'
-        ]
+        /**
+         * CLOSED LOST
+         * Deal lost to competitor or no decision
+         */
+        'closed_lost' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Closed Lost',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Win-back campaign for lost deals'
+        ],
+        
+        /**
+         * JUNK LEAD
+         * Not a real prospect (spam, wrong contact, etc.)
+         */
+        'junk_lead' => [
+            'zoho_field' => 'Lead_Status',
+            'zoho_value' => 'Junk Lead',
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'No action - just log for records'
+        ],
+        
+        
+        /**
+         * HIGH ENGAGEMENT (Based on Visitor Score)
+         * Lead visiting frequently
+         */
+        'high_engagement' => [
+            'zoho_field' => 'Visitor_Score',
+            'zoho_value' => ['>', '80'],
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Highly engaged - push for demo/trial'
+        ],
+        
+        /**
+         * FREQUENT VISITOR
+         * Lead visited multiple days
+         */
+        'frequent_visitor' => [
+            'zoho_field' => 'Days_Visited',
+            'zoho_value' => ['>', '5'],
+            'campaign_token' => 'REPLACE_WITH_TOKEN',
+            'description' => 'Frequent visitor - offer personal demo'
+        ],
+        
     ];
     
     /**
@@ -128,7 +180,37 @@ class CustomerJourneyMapper {
      */
     public static function findMatchingJourney($fieldName, $fieldValue) {
         foreach (self::$journeyMap as $stageName => $config) {
-            if ($config['zoho_field'] === $fieldName && $config['zoho_value'] === $fieldValue) {
+            if (is_array($config['zoho_value'])) {
+                $operator = $config['zoho_value'][0];
+                $compareValue = $config['zoho_value'][1];
+                
+                if ($config['zoho_field'] === $fieldName) {
+                    $match = false;
+                    switch ($operator) {
+                        case '>':
+                            $match = $fieldValue > $compareValue;
+                            break;
+                        case '<':
+                            $match = $fieldValue < $compareValue;
+                            break;
+                        case '>=':
+                            $match = $fieldValue >= $compareValue;
+                            break;
+                        case '<=':
+                            $match = $fieldValue <= $compareValue;
+                            break;
+                    }
+                    
+                    if ($match) {
+                        return [
+                            'stage' => $stageName,
+                            'config' => $config
+                        ];
+                    }
+                }
+            } 
+            // Handle exact match values
+            else if ($config['zoho_field'] === $fieldName && $config['zoho_value'] === $fieldValue) {
                 return [
                     'stage' => $stageName,
                     'config' => $config
@@ -141,18 +223,14 @@ class CustomerJourneyMapper {
 
 /**
  * WEBHOOK HANDLER FOR ZOHO CRM
- * Receives real-time updates when contact/lead/deal changes
  */
 function handle_zoho_journey_webhook() {
     
-    // Log incoming webhook for debugging
     $rawInput = file_get_contents('php://input');
     error_log("Zoho Journey Webhook Received: " . $rawInput);
     
-    // Zoho sends JSON payload
     $zohoData = json_decode($rawInput, true);
     
-    // Validate webhook
     if (!$zohoData || !isset($zohoData['data'])) {
         http_response_code(400);
         return ['status' => 'error', 'message' => 'Invalid webhook payload'];
@@ -160,7 +238,6 @@ function handle_zoho_journey_webhook() {
     
     $results = [];
     
-    // Process each record (Zoho can send multiple)
     foreach ($zohoData['data'] as $record) {
         
         $recordId = $record['id'] ?? null;
@@ -171,14 +248,23 @@ function handle_zoho_journey_webhook() {
         // Extract contact information
         $email = $record['Email'] ?? null;
         $phone = $record['Phone'] ?? $record['Mobile'] ?? null;
-        $name = $record['Full_Name'] ?? $record['First_Name'] ?? 'Customer';
         
-        if (!$email || !$phone) {
-            error_log("Skipping record $recordId: Missing email or phone");
+        $firstName = $record['First_Name'] ?? '';
+        $lastName = $record['Last_Name'] ?? '';
+        $name = trim("$firstName $lastName");
+        if (empty($name)) {
+            $name = $record['Company'] ?? 'Customer';
+        }
+        
+        if (!$email) {
+            error_log("Skipping record $recordId: Missing email");
             continue;
         }
         
-        // Detect journey stage changes
+        if (!$phone) {
+            error_log("Warning: Record $recordId ($email) has no phone - WhatsApp will fail");
+        }
+        
         $triggeredCampaigns = [];
         
         // Check all changed fields against journey map
@@ -187,9 +273,8 @@ function handle_zoho_journey_webhook() {
             $journey = CustomerJourneyMapper::findMatchingJourney($fieldName, $fieldValue);
             
             if ($journey) {
-                error_log("Journey trigger detected: {$journey['stage']} for $email");
+                error_log("Journey trigger detected: {$journey['stage']} for $email (Field: $fieldName = $fieldValue)");
                 
-                // Subscribe to the stage-specific campaign
                 try {
                     $result = subscribe_to_journey_campaign(
                         $email,
@@ -202,6 +287,8 @@ function handle_zoho_journey_webhook() {
                     
                     $triggeredCampaigns[] = [
                         'stage' => $journey['stage'],
+                        'field' => $fieldName,
+                        'value' => $fieldValue,
                         'result' => $result
                     ];
                     
@@ -214,6 +301,8 @@ function handle_zoho_journey_webhook() {
         $results[] = [
             'record_id' => $recordId,
             'email' => $email,
+            'name' => $name,
+            'phone' => $phone,
             'campaigns_triggered' => count($triggeredCampaigns),
             'details' => $triggeredCampaigns
         ];
@@ -233,37 +322,31 @@ function handle_zoho_journey_webhook() {
  */
 function subscribe_to_journey_campaign($email, $phone, $name, $campaignToken, $journeyStage, $zohoRecord) {
     
-    // Get campaign configuration
     $config = StorageService::getWebhookConfigByToken($campaignToken);
     
     if (!$config) {
-        throw new Exception("Campaign not found: $campaignToken");
+        throw new Exception("Campaign not found for token: $campaignToken. Create campaign first!");
     }
     
-    // Before subscribing to new journey, unsubscribe from previous stage campaigns
-    // This prevents duplicate/conflicting messages
     unsubscribe_from_previous_journeys($email, $journeyStage);
     
-    // Format subscriber data
     $subscriberData = [
         'email' => $email,
         'name' => $name,
-        'CustomField1' => preg_replace('/[^0-9+]/', '', $phone),
+        'CustomField1' => $phone ? preg_replace('/[^0-9+]/', '', $phone) : '',
         'list_id' => $config['list_id'],
         'trigger' => 'subscribe',
         'journey_stage' => $journeyStage,
         'zoho_record_id' => $zohoRecord['id'] ?? null,
-        'zoho_module' => $zohoRecord['module'] ?? null
+        'zoho_module' => 'Leads'
     ];
     
-    // Load the appropriate handler
     require_once __DIR__ . '/lib/handlers/DripSequenceHandler.php';
     require_once __DIR__ . '/lib/handlers/HybridDripHandler.php';
     require_once __DIR__ . '/lib/handlers/SingleMessageHandler.php';
     
     $mode = $config['mode'];
     
-    // Get handler based on mode
     $handler = null;
     switch ($mode) {
         case 'single':
@@ -279,30 +362,42 @@ function subscribe_to_journey_campaign($email, $phone, $name, $campaignToken, $j
             throw new Exception("Unsupported mode: $mode");
     }
     
-    // Process subscription
     $result = $handler->handleSubscription($subscriberData, $config);
     
-    // Log journey progression
     log_journey_progression($email, $journeyStage, $result);
     
     return $result;
 }
 
 /**
- * Unsubscribe from previous journey campaigns to avoid conflicts
- * When customer moves from "Lead" to "Customer", stop lead nurturing messages
+ * Unsubscribe from previous journey campaigns
  */
 function unsubscribe_from_previous_journeys($email, $newJourneyStage) {
     
-    // Define journey progression rules
+    // Define which stages should cancel which previous campaigns
     $progressionRules = [
-        'new_lead' => ['stop' => ['contacted', 'qualified', 'new_customer', 'active_customer']],
-        'contacted' => ['stop' => ['new_lead']],
-        'qualified' => ['stop' => ['new_lead', 'contacted']],
-        'new_customer' => ['stop' => ['new_lead', 'contacted', 'qualified', 'proposal_sent']],
-        'active_customer' => ['stop' => ['new_customer']],
-        'at_risk' => ['stop' => ['active_customer']],
-        'churned' => ['stop' => ['active_customer', 'at_risk']]
+        // When moving to trial, stop all previous nurture
+        'trial_moja' => ['stop' => ['qualified_prospect', 'future_contact_moja', 'unqualified_lead']],
+        'trial_non_moja' => ['stop' => ['qualified_prospect', 'future_contact_non_moja', 'unqualified_lead']],
+        
+        // When qualified, stop basic nurture
+        'qualified_prospect' => ['stop' => ['unqualified_lead']],
+        
+        // When evaluating, stop earlier stages
+        'evaluation' => ['stop' => ['qualified_prospect', 'trial_moja', 'trial_non_moja']],
+        
+        // When negotiating, stop all previous
+        'negotiation' => ['stop' => ['qualified_prospect', 'evaluation', 'trial_moja', 'trial_non_moja']],
+        
+        // When won, stop everything except onboarding
+        'closed_won' => ['stop' => ['qualified_prospect', 'evaluation', 'negotiation', 'trial_moja', 'trial_non_moja', 'future_contact_moja', 'future_contact_non_moja']],
+        
+        // When lost, stop active campaigns
+        'closed_lost' => ['stop' => ['qualified_prospect', 'evaluation', 'negotiation', 'trial_moja', 'trial_non_moja']],
+        
+        // Future contact stops active selling
+        'future_contact_moja' => ['stop' => ['qualified_prospect', 'trial_moja']],
+        'future_contact_non_moja' => ['stop' => ['qualified_prospect', 'trial_non_moja']],
     ];
     
     if (!isset($progressionRules[$newJourneyStage])) {
@@ -311,13 +406,11 @@ function unsubscribe_from_previous_journeys($email, $newJourneyStage) {
     
     $stagesToStop = $progressionRules[$newJourneyStage]['stop'];
     
-    // Load all active drip sequences
     $dripQueue = StorageService::load(DRIP_QUEUE_FILE, []);
     $hybridQueue = StorageService::load(HYBRID_QUEUE_FILE, []);
     
     $stopped = 0;
     
-    // Stop conflicting drip sequences
     foreach ($dripQueue as &$item) {
         if ($item['email'] === $email && 
             isset($item['journey_stage']) && 
@@ -331,7 +424,6 @@ function unsubscribe_from_previous_journeys($email, $newJourneyStage) {
         }
     }
     
-    // Stop conflicting hybrid sequences
     foreach ($hybridQueue as &$item) {
         if ($item['email'] === $email && 
             isset($item['journey_stage']) && 
@@ -340,8 +432,6 @@ function unsubscribe_from_previous_journeys($email, $newJourneyStage) {
             $item['status'] = 'cancelled';
             $item['cancelled_reason'] = "Progressed to $newJourneyStage";
             $stopped++;
-            
-            error_log("Stopped {$item['journey_stage']} hybrid campaign for $email (moved to $newJourneyStage)");
         }
     }
     
@@ -353,7 +443,7 @@ function unsubscribe_from_previous_journeys($email, $newJourneyStage) {
 }
 
 /**
- * Log customer journey progression for analytics
+ * Log journey progression
  */
 function log_journey_progression($email, $journeyStage, $campaignResult) {
     $logEntry = [
@@ -408,23 +498,18 @@ function get_journey_analytics() {
         $analytics['success_rate'] = round(($successCount / count($logs)) * 100, 2);
     }
     
-    // Get last 10 transitions
     $analytics['recent_transitions'] = array_slice(array_reverse($logs), 0, 10);
     
     return $analytics;
 }
 
-// ==========================================
 // API ROUTER
-// ==========================================
-
 $action = $_GET['action'] ?? null;
 $response = null;
 
 try {
     switch ($action) {
         
-        // Main webhook endpoint for Zoho
         case 'zoho_journey':
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 http_response_code(405);
@@ -434,7 +519,6 @@ try {
             }
             break;
         
-        // Get journey configuration
         case 'journey_config':
             $response = [
                 'status' => 'success',
@@ -442,7 +526,6 @@ try {
             ];
             break;
         
-        // Get journey analytics
         case 'journey_analytics':
             $response = [
                 'status' => 'success',
@@ -450,16 +533,15 @@ try {
             ];
             break;
         
-        // Manual subscription to journey (for testing)
         case 'subscribe_to_journey':
             $email = $_POST['email'] ?? null;
             $phone = $_POST['phone'] ?? null;
             $name = $_POST['name'] ?? 'Customer';
             $journeyStage = $_POST['journey_stage'] ?? null;
             
-            if (!$email || !$phone || !$journeyStage) {
+            if (!$email || !$journeyStage) {
                 http_response_code(400);
-                $response = ['status' => 'error', 'message' => 'Missing required fields'];
+                $response = ['status' => 'error', 'message' => 'Missing email or journey_stage'];
                 break;
             }
             
