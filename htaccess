@@ -1,0 +1,18 @@
+# WhatsApp Email Bridge - Authentication .htaccess
+# Protects all HTML and PHP files (except auth files)
+
+RewriteEngine On
+RewriteBase /whatsapp-email-bridge/
+
+# Allow auth system files to work normally
+RewriteRule ^(login\.php|google_oauth\.php|logout\.php|check_auth\.php)$ - [L]
+
+# Allow public assets (if you have any)
+RewriteRule ^(css/|js/|images/|data/) - [L]
+
+# Protect all .html files - route through auth check
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} \.html$
+RewriteRule ^(.*)$ check_auth.php?file=$1 [L,QSA]
+
+# Note: PHP files are protected by adding require_once 'protect.php'; at their top
