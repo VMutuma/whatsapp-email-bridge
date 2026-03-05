@@ -1,4 +1,5 @@
-<?php
+<?php require_once 'protect.php';
+
 /**
  * Bulk Subscribe API Router
  * Handles CSV uploads and bulk subscriptions to Sendy
