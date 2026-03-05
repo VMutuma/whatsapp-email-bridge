@@ -9,10 +9,31 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
 
+// ── SHUTDOWN HANDLER (catches fatal errors BEFORE ob_end_clean wipes output) ──
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        // Discard any buffered output so our JSON isn't mixed with HTML errors
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+        }
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Fatal PHP error: ' . $error['message'],
+            'file'    => $error['file'],
+            'line'    => $error['line'],
+        ]);
+    }
+});
+
 // Start output buffering
 ob_start();
 
-// Disable display_errors
+// Disable display_errors so HTML error output doesn't corrupt our JSON
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
@@ -23,8 +44,7 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/auth_config.php';
 
 // ─── AUTH CHECK ───────────────────────────────────────────────────────────────
-// Allow sendy_handler and autoresponder_handler without auth (called by Sendy)
-$action = $_GET['action'] ?? null;
+$action        = $_GET['action'] ?? null;
 $publicActions = ['sendy_handler', 'autoresponder_handler'];
 
 if (!in_array($action, $publicActions)) {
@@ -43,16 +63,15 @@ require_once __DIR__ . '/lib/StorageService.php';
 require_once __DIR__ . '/lib/BeemService.php';
 require_once __DIR__ . '/lib/SendyService.php';
 
-// Clear any output
+// Clear buffered output, then set headers
 ob_end_clean();
 
-// Set JSON header
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// Handle OPTIONS
+// Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -62,13 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $logFile = __DIR__ . '/data/webhook_debug.log';
 $logData = [
     'timestamp' => date('Y-m-d H:i:s'),
-    'method' => $_SERVER['REQUEST_METHOD'],
-    'get' => $_GET,
-    'post' => $_POST,
-    'raw_input' => file_get_contents('php://input')
+    'method'    => $_SERVER['REQUEST_METHOD'],
+    'get'       => $_GET,
+    'post'      => $_POST,
+    'raw_input' => file_get_contents('php://input'),
 ];
-file_put_contents(
-    $logFile, 
+@file_put_contents(
+    $logFile,
     json_encode($logData, JSON_PRETTY_PRINT) . "\n\n" . str_repeat('=', 80) . "\n\n",
     FILE_APPEND
 );
@@ -76,24 +95,25 @@ file_put_contents(
 /**
  * Load handler on demand
  */
-function getHandlerForMode($mode) {
+function getHandlerForMode($mode)
+{
     switch ($mode) {
         case 'single':
             require_once __DIR__ . '/lib/handlers/SingleMessageHandler.php';
             return new SingleMessageHandler();
-        
+
         case 'drip_sequence':
             require_once __DIR__ . '/lib/handlers/DripSequenceHandler.php';
             return new DripSequenceHandler();
-        
+
         case 'mirror_autoresponder':
             require_once __DIR__ . '/lib/handlers/AutoresponderMirrorHandler.php';
             return new AutoresponderMirrorHandler();
 
-        case 'hybrid_drip': 
+        case 'hybrid_drip':
             require_once __DIR__ . '/lib/handlers/HybridDripHandler.php';
             return new HybridDripHandler();
-        
+
         default:
             return null;
     }
@@ -102,39 +122,40 @@ function getHandlerForMode($mode) {
 /**
  * Handle Sendy subscription webhook
  */
-function handle_sendy_webhook() {
+function handle_sendy_webhook()
+{
     $sendyData = $_POST;
-    
+
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         return ['status' => 'error', 'message' => 'Method not allowed'];
     }
-    
+
     if (!isset($sendyData['trigger']) || $sendyData['trigger'] !== 'subscribe') {
         http_response_code(200);
         return ['status' => 'ignored', 'message' => 'Not a subscription event'];
     }
-    
+
     $token = $_GET['token'] ?? null;
     if (!$token) {
         http_response_code(400);
         return ['status' => 'error', 'message' => 'Missing webhook token'];
     }
-    
+
     $config = StorageService::getWebhookConfigByToken($token);
     if (!$config) {
         http_response_code(404);
         return ['status' => 'error', 'message' => 'Webhook token not found'];
     }
-    
+
     $sendyData['list_id'] = $config['list_id'];
     $handler = getHandlerForMode($config['mode']);
-    
+
     if (!$handler) {
         http_response_code(500);
         return ['status' => 'error', 'message' => 'Invalid configuration mode'];
     }
-    
+
     try {
         $result = $handler->handleSubscription($sendyData, $config);
         http_response_code(200);
@@ -148,12 +169,13 @@ function handle_sendy_webhook() {
 /**
  * Handle autoresponder webhook
  */
-function handle_autoresponder_webhook() {
+function handle_autoresponder_webhook()
+{
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         return ['status' => 'error', 'message' => 'Method not allowed'];
     }
-    
+
     try {
         require_once __DIR__ . '/lib/handlers/AutoresponderMirrorHandler.php';
         $result = AutoresponderMirrorHandler::handleAutoresponderTrigger($_POST);
@@ -168,15 +190,16 @@ function handle_autoresponder_webhook() {
 /**
  * GET brands
  */
-function handle_api_brands() {
+function handle_api_brands()
+{
     try {
         $sendy = new SendyService([
-            'SENDY_API_KEY' => SENDY_API_KEY,
-            'SENDY_URL' => SENDY_URL,
+            'SENDY_API_KEY'        => SENDY_API_KEY,
+            'SENDY_URL'            => SENDY_URL,
             'SENDY_GET_BRANDS_URL' => SENDY_GET_BRANDS_URL,
-            'SENDY_GET_LISTS_URL' => SENDY_GET_LISTS_URL,
+            'SENDY_GET_LISTS_URL'  => SENDY_GET_LISTS_URL,
         ]);
-        
+
         $brands = $sendy->getBrands();
         http_response_code(200);
         return $brands;
@@ -189,22 +212,23 @@ function handle_api_brands() {
 /**
  * GET lists
  */
-function handle_api_lists() {
+function handle_api_lists()
+{
     $brandId = $_GET['brandId'] ?? null;
-    
+
     if (!$brandId) {
         http_response_code(400);
         return ['status' => 'error', 'message' => 'Missing brandId'];
     }
-    
+
     try {
         $sendy = new SendyService([
-            'SENDY_API_KEY' => SENDY_API_KEY,
-            'SENDY_URL' => SENDY_URL,
+            'SENDY_API_KEY'        => SENDY_API_KEY,
+            'SENDY_URL'            => SENDY_URL,
             'SENDY_GET_BRANDS_URL' => SENDY_GET_BRANDS_URL,
-            'SENDY_GET_LISTS_URL' => SENDY_GET_LISTS_URL,
+            'SENDY_GET_LISTS_URL'  => SENDY_GET_LISTS_URL,
         ]);
-        
+
         $lists = $sendy->getLists($brandId);
         http_response_code(200);
         return $lists;
@@ -217,15 +241,16 @@ function handle_api_lists() {
 /**
  * GET templates
  */
-function handle_api_whatsapp_templates() {
+function handle_api_whatsapp_templates()
+{
     try {
         $beem = new BeemService([
-            'BEEM_API_KEY' => BEEM_API_KEY,
-            'BEEM_SECRET_KEY' => BEEM_SECRET_KEY,
-            'BEEM_API_BASE_URL' => BEEM_API_BASE_URL,
+            'BEEM_API_KEY'               => BEEM_API_KEY,
+            'BEEM_SECRET_KEY'            => BEEM_SECRET_KEY,
+            'BEEM_API_BASE_URL'          => BEEM_API_BASE_URL,
             'BEEM_USER_ID_FOR_TEMPLATES' => BEEM_USER_ID_FOR_TEMPLATES,
         ]);
-        
+
         $templates = $beem->getTemplates();
         http_response_code(200);
         return $templates;
@@ -238,91 +263,123 @@ function handle_api_whatsapp_templates() {
 /**
  * POST save_configuration
  */
-function handle_api_save_configuration() {
-    $input = json_decode(file_get_contents('php://input'), true);
-    
-    $listId = $input['list_id'] ?? null;
-    $listName = $input['list_name'] ?? 'Unknown';
-    $webhookName = $input['webhook_name'] ?? $listName;
-    $webhookUrlRoot = $input['webhook_url_root'] ?? null;
-    $config = $input['config'] ?? null;
-    
+function handle_api_save_configuration()
+{
+    $rawInput = file_get_contents('php://input');
+
+    // Guard: empty body
+    if (empty(trim($rawInput))) {
+        http_response_code(400);
+        return ['status' => 'error', 'message' => 'Request body is empty'];
+    }
+
+    $input = json_decode($rawInput, true);
+
+    // Guard: malformed JSON
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        http_response_code(400);
+        return ['status' => 'error', 'message' => 'Invalid JSON: ' . json_last_error_msg()];
+    }
+
+    $listId         = $input['list_id']          ?? null;
+    $listName       = $input['list_name']         ?? 'Unknown';
+    $webhookName    = $input['webhook_name']       ?? $listName;
+    $webhookUrlRoot = $input['webhook_url_root']   ?? null;
+    $config         = $input['config']             ?? null;
+
     if (!$listId || !$webhookUrlRoot || !$config) {
         http_response_code(400);
         return ['status' => 'error', 'message' => 'Missing required parameters'];
     }
-    
-    $mode = $config['mode'] ?? 'single';
+
+    $mode    = $config['mode'] ?? 'single';
     $handler = getHandlerForMode($mode);
-    
+
     if (!$handler) {
         http_response_code(400);
         return ['status' => 'error', 'message' => "Invalid mode: $mode"];
     }
-    
+
     $validation = $handler->validateConfig($config);
     if ($validation !== true) {
         http_response_code(400);
         return ['status' => 'error', 'message' => 'Invalid configuration', 'details' => $validation];
     }
-    
+
+    // Ensure data/ directory exists and is writable
+    $dataDir = __DIR__ . '/data';
+    if (!is_dir($dataDir)) {
+        if (!mkdir($dataDir, 0755, true)) {
+            http_response_code(500);
+            return ['status' => 'error', 'message' => 'Cannot create data/ directory. Check server permissions.'];
+        }
+    }
+    if (!is_writable($dataDir)) {
+        http_response_code(500);
+        return [
+            'status'  => 'error',
+            'message' => 'data/ directory is not writable. chmod 755 ' . $dataDir,
+        ];
+    }
+
     $token = StorageService::generateToken();
-    
-    $config['list_id'] = $listId;
-    $config['list_name'] = $listName;
-    $config['webhook_name'] = $webhookName;
-    $config['created_at'] = time();
-    $config['updated_at'] = time();
-    $config['token'] = $token;
+
+    $config['list_id']          = $listId;
+    $config['list_name']        = $listName;
+    $config['webhook_name']     = $webhookName;
+    $config['created_at']       = time();
+    $config['updated_at']       = time();
+    $config['token']            = $token;
     $config['webhook_url_root'] = $webhookUrlRoot;
 
     $success = StorageService::saveWebhookConfig($token, $config);
-    
+
     if (!$success) {
         http_response_code(500);
-        return ['status' => 'error', 'message' => 'Failed to save configuration'];
+        return ['status' => 'error', 'message' => 'Failed to save configuration. Check data/ directory permissions.'];
     }
-    
+
     $webhookURL = rtrim($webhookUrlRoot, '/') . '/webhook_api.php?action=sendy_handler&token=' . $token;
-    
+
     $autoresponderWebhookURL = null;
     if ($mode === 'mirror_autoresponder') {
         $autoresponderWebhookURL = rtrim($webhookUrlRoot, '/') . '/webhook_api.php?action=autoresponder_handler&token=' . $token;
     }
-    
+
     http_response_code(200);
     return [
-        'status' => 'success',
-        'message' => 'Configuration saved',
-        'webhook_url' => $webhookURL,
-        'autoresponder_webhook_url' => $autoresponderWebhookURL,
-        'token' => $token,
-        'list_id' => $listId,
-        'list_name' => $listName,
-        'webhook_name' => $webhookName,
-        'mode' => $mode
+        'status'                   => 'success',
+        'message'                  => 'Configuration saved',
+        'webhook_url'              => $webhookURL,
+        'autoresponder_webhook_url'=> $autoresponderWebhookURL,
+        'token'                    => $token,
+        'list_id'                  => $listId,
+        'list_name'                => $listName,
+        'webhook_name'             => $webhookName,
+        'mode'                     => $mode,
     ];
 }
 
 /**
  * GET list_webhooks
  */
-function handle_api_list_webhooks() {
+function handle_api_list_webhooks()
+{
     $webhooks = StorageService::getAllWebhooks();
-    
+
     $result = [];
     foreach ($webhooks as $token => $config) {
         $result[] = [
-            'token' => $token,
-            'list_id' => $config['list_id'] ?? null,
-            'list_name' => $config['list_name'] ?? 'Unknown',
-            'webhook_name' => $config['webhook_name'] ?? $config['list_name'] ?? 'Unknown',
-            'mode' => $config['mode'] ?? 'unknown',
-            'created_at' => $config['created_at'] ?? null,
-            'webhook_url' => ($config['webhook_url_root'] ?? '') . '/webhook_api.php?action=sendy_handler&token=' . $token
+            'token'       => $token,
+            'list_id'     => $config['list_id']     ?? null,
+            'list_name'   => $config['list_name']   ?? 'Unknown',
+            'webhook_name'=> $config['webhook_name'] ?? $config['list_name'] ?? 'Unknown',
+            'mode'        => $config['mode']         ?? 'unknown',
+            'created_at'  => $config['created_at']  ?? null,
+            'webhook_url' => ($config['webhook_url_root'] ?? '') . '/webhook_api.php?action=sendy_handler&token=' . $token,
         ];
     }
-    
+
     http_response_code(200);
     return $result;
 }
@@ -330,21 +387,22 @@ function handle_api_list_webhooks() {
 /**
  * DELETE webhook
  */
-function handle_api_delete_webhook() {
+function handle_api_delete_webhook()
+{
     $token = $_GET['token'] ?? null;
-    
+
     if (!$token) {
         http_response_code(400);
         return ['status' => 'error', 'message' => 'Missing token'];
     }
-    
+
     if (!StorageService::tokenExists($token)) {
         http_response_code(404);
         return ['status' => 'error', 'message' => 'Webhook not found'];
     }
-    
+
     $success = StorageService::deleteWebhook($token);
-    
+
     if ($success) {
         http_response_code(200);
         return ['status' => 'success', 'message' => 'Webhook deleted'];
@@ -357,25 +415,26 @@ function handle_api_delete_webhook() {
 /**
  * GET drip_status
  */
-function handle_api_drip_status() {
+function handle_api_drip_status()
+{
     $queue = StorageService::load(DRIP_QUEUE_FILE, []);
-    
+
     $stats = [
-        'total' => count($queue),
-        'active' => 0,
-        'completed' => 0,
-        'pending_messages' => 0
+        'total'            => count($queue),
+        'active'           => 0,
+        'completed'        => 0,
+        'pending_messages' => 0,
     ];
-    
+
     foreach ($queue as $item) {
         if (($item['status'] ?? '') === 'active') {
             $stats['active']++;
             $stats['pending_messages'] += (count($item['sequence'] ?? []) - count($item['completed_steps'] ?? []));
-        } else if (($item['status'] ?? '') === 'completed') {
+        } elseif (($item['status'] ?? '') === 'completed') {
             $stats['completed']++;
         }
     }
-    
+
     http_response_code(200);
     return $stats;
 }
@@ -383,7 +442,8 @@ function handle_api_drip_status() {
 /**
  * GET hybrid_status
  */
-function handle_api_hybrid_status() {
+function handle_api_hybrid_status()
+{
     try {
         require_once __DIR__ . '/lib/handlers/HybridDripHandler.php';
         $stats = HybridDripHandler::getStats();
@@ -395,19 +455,19 @@ function handle_api_hybrid_status() {
     }
 }
 
-// ROUTER
+// ── ROUTER ────────────────────────────────────────────────────────────────────
 $response = null;
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'sendy_handler') {
         $response = handle_sendy_webhook();
-        
+
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'autoresponder_handler') {
         $response = handle_autoresponder_webhook();
-        
+
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'save_configuration') {
         $response = handle_api_save_configuration();
-        
+
     } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
         switch ($action) {
             case 'brands':
@@ -439,11 +499,20 @@ try {
         http_response_code(400);
         $response = ['status' => 'error', 'message' => 'Invalid request'];
     }
-    
+
 } catch (Exception $e) {
     error_log("Router exception: " . $e->getMessage());
     http_response_code(500);
     $response = ['status' => 'error', 'message' => 'Server error', 'details' => $e->getMessage()];
+}
+
+// ── NULL GUARD: if something died silently, we still return parseable JSON ──
+if ($response === null) {
+    http_response_code(500);
+    $response = [
+        'status'  => 'error',
+        'message' => 'Response was null — a handler returned nothing or a fatal error was caught by the shutdown handler above.',
+    ];
 }
 
 echo json_encode($response);
