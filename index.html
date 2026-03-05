@@ -194,10 +194,6 @@
             background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
         }
 
-        /* .mode-card[data-mode="hybrid_drip"].active .mode-icon {
-            background: linear-gradient(135deg, var(--tertiary-color) 0%, var(--tertiary-dark) 100%);
-        } */
-
         .mode-title {
             font-weight: 600;
             color: #2d3748;
@@ -332,7 +328,6 @@
             height: 16px;
         }
 
-        /* NEW: Time unit input group styling */
         .input-group-time {
             display: flex;
             gap: 8px;
@@ -346,17 +341,6 @@
             flex: 0 0 140px;
         }
 
-        .time-unit-badge {
-            background: #edf7f8;
-            color: var(--primary-color);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        /* Hybrid specific styles */
         .channel-selector {
             display: flex;
             gap: 8px;
@@ -384,12 +368,6 @@
             background: #f7fafc;
         }
 
-        .channel-btn.active {
-            border-color: var(--primary-color);
-            background: #edf7f8;
-            color: var(--primary-color);
-        }
-
         .channel-btn.whatsapp.active {
             border-color: var(--primary-color);
             background: #edf7f8;
@@ -404,10 +382,6 @@
 
         .channel-icon {
             font-size: 14px;
-        }
-
-        .email-subject-input {
-            margin-top: 12px;
         }
 
         .template-required {
@@ -439,7 +413,6 @@
                     <i class="fa-solid fa-route"></i> Journey Dashboard
                 </a></li>
             </ul>
-           
         </nav>
 
         <div class="main-container">
@@ -496,62 +469,47 @@
                     Give this webhook a descriptive name to easily identify it later.
                 </div>
             </div>
+
             <div class="mb-4">
                 <label class="form-label">
                     <i class="fa-solid fa-sliders"></i>
-                    4. Choose Drip Mode
+                    5. Choose Drip Mode
                 </label>
                 <div class="row g-3">
                     <div class="col-md-3">
                         <div class="mode-card active" data-mode="single">
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-bolt"></i>
-                                </div>
+                                <div class="mode-icon"><i class="fa-solid fa-bolt"></i></div>
                                 <h6 class="mode-title">Single Message</h6>
                             </div>
-                            <p class="mode-description">
-                                Send one WhatsApp message immediately when someone subscribes.
-                            </p>
+                            <p class="mode-description">Send one WhatsApp message immediately when someone subscribes.</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mode-card" data-mode="drip_sequence">
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </div>
+                                <div class="mode-icon"><i class="fa-solid fa-calendar-days"></i></div>
                                 <h6 class="mode-title">Drip Sequence</h6>
                             </div>
-                            <p class="mode-description">
-                                Create a timed sequence of WhatsApp messages independent of email.
-                            </p>
+                            <p class="mode-description">Create a timed sequence of WhatsApp messages independent of email.</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mode-card" data-mode="mirror_autoresponder">
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-mirror"></i>
-                                </div>
+                                <div class="mode-icon"><i class="fa-solid fa-mirror"></i></div>
                                 <h6 class="mode-title">Mirror Autoresponder</h6>
                             </div>
-                            <p class="mode-description">
-                                Send WhatsApp messages in sync with Sendy email autoresponders.
-                            </p>
+                            <p class="mode-description">Send WhatsApp messages in sync with Sendy email autoresponders.</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mode-card" data-mode="hybrid_drip">
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-code-branch"></i>
-                                </div>
+                                <div class="mode-icon"><i class="fa-solid fa-code-branch"></i></div>
                                 <h6 class="mode-title">Hybrid Drip</h6>
                             </div>
-                            <p class="mode-description">
-                                Alternate between Email and WhatsApp messages in a unified sequence.
-                            </p>
+                            <p class="mode-description">Alternate between Email and WhatsApp messages in a unified sequence.</p>
                         </div>
                     </div>
                 </div>
@@ -560,7 +518,7 @@
             <div id="singleConfig" class="mb-4">
                 <label class="form-label">
                     <i class="fa-brands fa-whatsapp"></i>
-                    5. Select WhatsApp Template
+                    6. Select WhatsApp Template
                 </label>
                 <select class="form-select" id="singleTemplate" disabled>
                     <option>Loading Templates...</option>
@@ -570,12 +528,11 @@
             <div id="dripConfig" class="mb-4 d-none">
                 <label class="form-label">
                     <i class="fa-solid fa-list-check"></i>
-                    5. Build Your Drip Sequence
+                    6. Build Your Drip Sequence
                 </label>
                 <div class="info-box mb-3">
                     <i class="fa-solid fa-clock"></i>
-                    <strong>Flexible Timing:</strong> Set delays in minutes, hours, days, weeks, or months. 
-                    Perfect for quick follow-ups or long-term nurture campaigns!
+                    <strong>Flexible Timing:</strong> Set delays in minutes, hours, days, weeks, or months.
                 </div>
                 <div class="drip-builder" id="dripBuilder"></div>
                 <button class="btn btn-add-step mt-3" onclick="addDripStep()">
@@ -586,7 +543,7 @@
             <div id="mirrorConfig" class="mb-4 d-none">
                 <label class="form-label">
                     <i class="fa-solid fa-layer-group"></i>
-                    5. Map Autoresponder Steps to WhatsApp Templates
+                    6. Map Autoresponder Steps to WhatsApp Templates
                 </label>
                 <div class="info-box mb-3">
                     <i class="fa-solid fa-lightbulb"></i>
@@ -601,11 +558,11 @@
             <div id="hybridConfig" class="mb-4 d-none">
                 <label class="form-label">
                     <i class="fa-solid fa-code-branch"></i>
-                    5. Build Hybrid Email + WhatsApp Sequence
+                    6. Build Hybrid Email + WhatsApp Sequence
                 </label>
                 <div class="info-box mb-3">
                     <i class="fa-solid fa-shuffle"></i>
-                    <strong>Unified Campaign:</strong> Create sequences that alternate between Email and WhatsApp messages. 
+                    <strong>Unified Campaign:</strong> Alternate between Email and WhatsApp messages.
                     Example: Email → WhatsApp (2h) → Email (1d) → WhatsApp (3d)
                 </div>
                 <div class="drip-builder" id="hybridBuilder"></div>
@@ -657,7 +614,12 @@
             if (body && method === 'POST') options.body = JSON.stringify(body);
             try {
                 const response = await fetch(url, options);
-                return await response.json();
+                const data = await response.json();
+                if (response.status === 401) {
+                    window.location.href = 'login.php';
+                    return;
+                }
+                return data;
             } catch (error) {
                 return { status: 'error', message: `Network error: ${error.message}` };
             }
@@ -724,7 +686,7 @@
             brandSelect.disabled = true;
             const data = await apiCall('brands');
             brandSelect.innerHTML = '<option value="">Select Brand</option>';
-            if (!data.status && Array.isArray(data)) {
+            if (data && !data.status && Array.isArray(data)) {
                 data.forEach(brand => {
                     brandSelect.innerHTML += `<option value="${brand.id}">${brand.name}</option>`;
                 });
@@ -741,7 +703,7 @@
             }
             const data = await apiCall('lists', 'GET', null, { brandId });
             listSelect.innerHTML = '<option value="">Select List</option>';
-            if (!data.status && Array.isArray(data)) {
+            if (data && !data.status && Array.isArray(data)) {
                 data.forEach(list => {
                     listSelect.innerHTML += `<option value="${list.id}">${list.name}</option>`;
                 });
@@ -753,7 +715,7 @@
             singleTemplate.disabled = true;
             const data = await apiCall('whatsapp_templates');
             singleTemplate.innerHTML = '<option value="">Select Template</option>';
-            if (!data.status && Array.isArray(data)) {
+            if (data && !data.status && Array.isArray(data)) {
                 templates = data;
                 data.forEach(t => {
                     const vars = t.placeholders > 0 ? ` [${t.placeholders} var(s)]` : '';
@@ -766,21 +728,9 @@
         function addDripStep() {
             dripStepCounter++;
             const stepNumber = dripBuilder.children.length + 1;
-            
-            // Smart default values based on step number
-            let defaultDelay = 0;
-            let defaultUnit = 'minutes';
-            
-            if (stepNumber === 1) {
-                defaultDelay = 0;
-                defaultUnit = 'minutes';
-            } else if (stepNumber === 2) {
-                defaultDelay = 1;
-                defaultUnit = 'hours';
-            } else {
-                defaultDelay = stepNumber - 1;
-                defaultUnit = 'days';
-            }
+            let defaultDelay = 0, defaultUnit = 'minutes';
+            if (stepNumber === 2) { defaultDelay = 1; defaultUnit = 'hours'; }
+            else if (stepNumber > 2) { defaultDelay = stepNumber - 1; defaultUnit = 'days'; }
             
             const stepHtml = `
                 <div class="drip-step" data-step="${dripStepCounter}">
@@ -791,36 +741,27 @@
                         </button>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small">
-                            <i class="fa-brands fa-whatsapp"></i> WhatsApp Template
-                        </label>
+                        <label class="form-label small"><i class="fa-brands fa-whatsapp"></i> WhatsApp Template</label>
                         <select class="form-select drip-template" data-step="${dripStepCounter}">
                             <option value="">Select Template</option>
                             ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
                         </select>
                     </div>
                     <div>
-                        <label class="form-label small">
-                            <i class="fa-solid fa-clock"></i> Send After
-                        </label>
+                        <label class="form-label small"><i class="fa-solid fa-clock"></i> Send After</label>
                         <div class="input-group-time">
-                            <input type="number" class="form-control drip-delay" data-step="${dripStepCounter}" 
-                                   min="0" value="${defaultDelay}" placeholder="0">
+                            <input type="number" class="form-control drip-delay" data-step="${dripStepCounter}" min="0" value="${defaultDelay}">
                             <select class="form-select drip-unit" data-step="${dripStepCounter}">
-                                <option value="minutes" ${defaultUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
-                                <option value="hours" ${defaultUnit === 'hours' ? 'selected' : ''}>Hours</option>
-                                <option value="days" ${defaultUnit === 'days' ? 'selected' : ''}>Days</option>
-                                <option value="weeks" ${defaultUnit === 'weeks' ? 'selected' : ''}>Weeks</option>
-                                <option value="months" ${defaultUnit === 'months' ? 'selected' : ''}>Months</option>
+                                <option value="minutes" ${defaultUnit==='minutes'?'selected':''}>Minutes</option>
+                                <option value="hours" ${defaultUnit==='hours'?'selected':''}>Hours</option>
+                                <option value="days" ${defaultUnit==='days'?'selected':''}>Days</option>
+                                <option value="weeks" ${defaultUnit==='weeks'?'selected':''}>Weeks</option>
+                                <option value="months" ${defaultUnit==='months'?'selected':''}>Months</option>
                             </select>
                         </div>
-                        <small class="text-muted">
-                            <i class="fa-solid fa-info-circle"></i> 
-                            Delay from previous step (or subscription for first step)
-                        </small>
+                        <small class="text-muted">Delay from previous step (or subscription for first step)</small>
                     </div>
-                </div>
-            `;
+                </div>`;
             dripBuilder.insertAdjacentHTML('beforeend', stepHtml);
             updateDripStepNumbers();
             checkReadiness();
@@ -841,15 +782,12 @@
         function addAutoresponderMapping() {
             const mappingHtml = `
                 <div class="mapping-row" data-mapping="${autoresponderStepCounter}">
-                    <label class="form-label small">
-                        <i class="fa-solid fa-envelope"></i> Email Step ${autoresponderStepCounter}
-                    </label>
+                    <label class="form-label small"><i class="fa-solid fa-envelope"></i> Email Step ${autoresponderStepCounter}</label>
                     <select class="form-select autoresponder-template" data-mapping="${autoresponderStepCounter}">
                         <option value="">Select WhatsApp Template</option>
                         ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
                     </select>
-                </div>
-            `;
+                </div>`;
             autoresponderMapping.insertAdjacentHTML('beforeend', mappingHtml);
             autoresponderStepCounter++;
             checkReadiness();
@@ -858,23 +796,11 @@
         function addHybridStep() {
             hybridStepCounter++;
             const stepNumber = hybridBuilder.children.length + 1;
-            
-            // Smart default values based on step number
-            let defaultDelay = 0;
-            let defaultUnit = 'minutes';
-            let defaultChannel = stepNumber % 2 === 1 ? 'whatsapp' : 'email';
-            
-            if (stepNumber === 1) {
-                defaultDelay = 0;
-                defaultUnit = 'minutes';
-            } else if (stepNumber === 2) {
-                defaultDelay = 2;
-                defaultUnit = 'hours';
-            } else {
-                defaultDelay = stepNumber - 1;
-                defaultUnit = 'days';
-            }
-            
+            let defaultDelay = 0, defaultUnit = 'minutes';
+            const defaultChannel = stepNumber % 2 === 1 ? 'whatsapp' : 'email';
+            if (stepNumber === 2) { defaultDelay = 2; defaultUnit = 'hours'; }
+            else if (stepNumber > 2) { defaultDelay = stepNumber - 1; defaultUnit = 'days'; }
+
             const stepHtml = `
                 <div class="drip-step" data-hybrid-step="${hybridStepCounter}">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -883,72 +809,48 @@
                             <i class="fa-solid fa-trash"></i> Remove
                         </button>
                     </div>
-                    
                     <div class="channel-selector mb-3">
-                        <button type="button" class="channel-btn whatsapp ${defaultChannel === 'whatsapp' ? 'active' : ''}" 
+                        <button type="button" class="channel-btn whatsapp ${defaultChannel==='whatsapp'?'active':''}" 
                                 onclick="setHybridChannel(${hybridStepCounter}, 'whatsapp')">
-                            <i class="fa-brands fa-whatsapp channel-icon"></i>
-                            WhatsApp
+                            <i class="fa-brands fa-whatsapp channel-icon"></i> WhatsApp
                         </button>
-                        <button type="button" class="channel-btn email ${defaultChannel === 'email' ? 'active' : ''}" 
+                        <button type="button" class="channel-btn email ${defaultChannel==='email'?'active':''}" 
                                 onclick="setHybridChannel(${hybridStepCounter}, 'email')">
-                            <i class="fa-solid fa-envelope channel-icon"></i>
-                            Email
+                            <i class="fa-solid fa-envelope channel-icon"></i> Email
                         </button>
                     </div>
-                    
                     <div class="mb-3">
-                        <label class="form-label small">
-                            <i class="fa-solid fa-heading"></i> Step Name
-                        </label>
-                        <input type="text" class="form-control hybrid-step-name" 
-                               data-step="${hybridStepCounter}" 
+                        <label class="form-label small"><i class="fa-solid fa-heading"></i> Step Name</label>
+                        <input type="text" class="form-control hybrid-step-name" data-step="${hybridStepCounter}" 
                                placeholder="e.g., Welcome Message, Follow-up, Offer">
                     </div>
-                    
-                    <div id="whatsappConfig-${hybridStepCounter}" class="${defaultChannel === 'whatsapp' ? '' : 'd-none'}">
-                        <label class="form-label small">
-                            <i class="fa-brands fa-whatsapp"></i> WhatsApp Template
-                            <span class="template-required">*</span>
-                        </label>
+                    <div id="whatsappConfig-${hybridStepCounter}" class="${defaultChannel==='whatsapp'?'':'d-none'}">
+                        <label class="form-label small"><i class="fa-brands fa-whatsapp"></i> WhatsApp Template <span class="template-required">*</span></label>
                         <select class="form-select hybrid-whatsapp-template" data-step="${hybridStepCounter}">
                             <option value="">Select Template</option>
                             ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
                         </select>
                     </div>
-                    
-                    <div id="emailConfig-${hybridStepCounter}" class="${defaultChannel === 'email' ? '' : 'd-none'}">
-                        <label class="form-label small">
-                            <i class="fa-solid fa-envelope"></i> Email Subject
-                            <span class="template-required">*</span>
-                        </label>
-                        <input type="text" class="form-control hybrid-email-subject" 
-                               data-step="${hybridStepCounter}" 
+                    <div id="emailConfig-${hybridStepCounter}" class="${defaultChannel==='email'?'':'d-none'}">
+                        <label class="form-label small"><i class="fa-solid fa-envelope"></i> Email Subject <span class="template-required">*</span></label>
+                        <input type="text" class="form-control hybrid-email-subject" data-step="${hybridStepCounter}" 
                                placeholder="e.g., Welcome to our newsletter!">
                     </div>
-                    
                     <div class="mt-3">
-                        <label class="form-label small">
-                            <i class="fa-solid fa-clock"></i> Send After
-                        </label>
+                        <label class="form-label small"><i class="fa-solid fa-clock"></i> Send After</label>
                         <div class="input-group-time">
-                            <input type="number" class="form-control hybrid-delay" data-step="${hybridStepCounter}" 
-                                   min="0" value="${defaultDelay}" placeholder="0">
+                            <input type="number" class="form-control hybrid-delay" data-step="${hybridStepCounter}" min="0" value="${defaultDelay}">
                             <select class="form-select hybrid-unit" data-step="${hybridStepCounter}">
-                                <option value="minutes" ${defaultUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
-                                <option value="hours" ${defaultUnit === 'hours' ? 'selected' : ''}>Hours</option>
-                                <option value="days" ${defaultUnit === 'days' ? 'selected' : ''}>Days</option>
-                                <option value="weeks" ${defaultUnit === 'weeks' ? 'selected' : ''}>Weeks</option>
-                                <option value="months" ${defaultUnit === 'months' ? 'selected' : ''}>Months</option>
+                                <option value="minutes" ${defaultUnit==='minutes'?'selected':''}>Minutes</option>
+                                <option value="hours" ${defaultUnit==='hours'?'selected':''}>Hours</option>
+                                <option value="days" ${defaultUnit==='days'?'selected':''}>Days</option>
+                                <option value="weeks" ${defaultUnit==='weeks'?'selected':''}>Weeks</option>
+                                <option value="months" ${defaultUnit==='months'?'selected':''}>Months</option>
                             </select>
                         </div>
-                        <small class="text-muted">
-                            <i class="fa-solid fa-info-circle"></i> 
-                            Delay from previous step (or subscription for first step)
-                        </small>
+                        <small class="text-muted">Delay from previous step (or subscription for first step)</small>
                     </div>
-                </div>
-            `;
+                </div>`;
             hybridBuilder.insertAdjacentHTML('beforeend', stepHtml);
             updateHybridStepNumbers();
             checkReadiness();
@@ -969,17 +871,10 @@
         function setHybridChannel(stepId, channel) {
             const stepElement = hybridBuilder.querySelector(`[data-hybrid-step="${stepId}"]`);
             if (!stepElement) return;
-            
-            // Update button states
-            stepElement.querySelectorAll('.channel-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            stepElement.querySelectorAll('.channel-btn').forEach(btn => btn.classList.remove('active'));
             stepElement.querySelector(`.channel-btn.${channel}`).classList.add('active');
-            
-            // Show/hide configuration sections
             stepElement.querySelector(`#whatsappConfig-${stepId}`).classList.toggle('d-none', channel !== 'whatsapp');
             stepElement.querySelector(`#emailConfig-${stepId}`).classList.toggle('d-none', channel !== 'email');
-            
             checkReadiness();
         }
 
@@ -1000,7 +895,6 @@
                     const template = step.querySelector(`.drip-template[data-step="${stepId}"]`).value;
                     const delay = step.querySelector(`.drip-delay[data-step="${stepId}"]`).value;
                     const unit = step.querySelector(`.drip-unit[data-step="${stepId}"]`).value;
-                    
                     if (template && delay !== '') {
                         config.sequence.push({
                             template_id: template,
@@ -1010,79 +904,41 @@
                         });
                     }
                 });
-                if (config.sequence.length === 0) {
-                    showAlert('error', 'Please configure at least one drip step.');
-                    return;
-                }
+                if (config.sequence.length === 0) { showAlert('error', 'Please configure at least one drip step.'); return; }
             } else if (mode === 'mirror_autoresponder') {
                 config.autoresponder_id = 'autoresponder_' + listId;
                 config.template_map = {};
                 autoresponderMapping.querySelectorAll('.mapping-row').forEach((row, index) => {
-                    const template = row.querySelector(`.autoresponder-template`).value;
+                    const template = row.querySelector('.autoresponder-template').value;
                     if (template) config.template_map[index + 1] = template;
                 });
-                if (Object.keys(config.template_map).length === 0) {
-                    showAlert('error', 'Please configure at least one mapping.');
-                    return;
-                }
+                if (Object.keys(config.template_map).length === 0) { showAlert('error', 'Please configure at least one mapping.'); return; }
             } else if (mode === 'hybrid_drip') {
                 config.sequence = [];
+                let hasError = false;
                 hybridBuilder.querySelectorAll('.drip-step').forEach(step => {
+                    if (hasError) return;
                     const stepId = step.dataset.hybridStep;
                     const channel = step.querySelector('.channel-btn.whatsapp.active') ? 'whatsapp' : 'email';
                     const stepName = step.querySelector(`.hybrid-step-name[data-step="${stepId}"]`).value;
                     const delay = step.querySelector(`.hybrid-delay[data-step="${stepId}"]`).value;
                     const unit = step.querySelector(`.hybrid-unit[data-step="${stepId}"]`).value;
-                    
-                    if (!delay || delay === '') {
-                        showAlert('error', 'Please enter a delay for all hybrid steps.');
-                        return;
-                    }
-                    
-                    const stepConfig = {
-                        channel: channel,
-                        delay: parseInt(delay),
-                        delay_unit: unit,
-                        name: stepName || `${channel} Step`
-                    };
-                    
+                    const stepConfig = { channel, delay: parseInt(delay), delay_unit: unit, name: stepName || `${channel} Step` };
                     if (channel === 'whatsapp') {
                         const template = step.querySelector(`.hybrid-whatsapp-template[data-step="${stepId}"]`).value;
-                        if (!template) {
-                            showAlert('error', 'Please select a WhatsApp template for WhatsApp steps.');
-                            return;
-                        }
+                        if (!template) { showAlert('error', 'Please select a WhatsApp template for all WhatsApp steps.'); hasError = true; return; }
                         stepConfig.template_id = template;
                     } else {
                         const subject = step.querySelector(`.hybrid-email-subject[data-step="${stepId}"]`).value;
-                        if (!subject) {
-                            showAlert('error', 'Please enter an email subject for Email steps.');
-                            return;
-                        }
+                        if (!subject) { showAlert('error', 'Please enter an email subject for all Email steps.'); hasError = true; return; }
                         stepConfig.subject = subject;
                     }
-                    
                     config.sequence.push(stepConfig);
                 });
-                
-                if (config.sequence.length === 0) {
-                    showAlert('error', 'Please configure at least one hybrid step.');
-                    return;
-                }
-                
-                // Validate we have both email and WhatsApp steps
-                const whatsappSteps = config.sequence.filter(s => s.channel === 'whatsapp').length;
-                const emailSteps = config.sequence.filter(s => s.channel === 'email').length;
-                
-                if (whatsappSteps === 0) {
-                    showAlert('error', 'Hybrid sequence must include at least one WhatsApp step.');
-                    return;
-                }
-                
-                if (emailSteps === 0) {
-                    showAlert('error', 'Hybrid sequence must include at least one Email step.');
-                    return;
-                }
+                if (hasError) return;
+                if (config.sequence.length === 0) { showAlert('error', 'Please configure at least one hybrid step.'); return; }
+                if (!config.sequence.some(s => s.channel === 'whatsapp')) { showAlert('error', 'Hybrid sequence must include at least one WhatsApp step.'); return; }
+                if (!config.sequence.some(s => s.channel === 'email')) { showAlert('error', 'Hybrid sequence must include at least one Email step.'); return; }
             }
 
             generateButton.disabled = true;
@@ -1091,7 +947,7 @@
             const data = await apiCall('save_configuration', 'POST', {
                 list_id: listId,
                 list_name: listName,
-                webhook_name: webhookName || listName + ' - ' + mode, // Default name
+                webhook_name: webhookName || listName + ' - ' + mode,
                 webhook_url_root: webhookUrlRoot,
                 config: config
             });
@@ -1099,72 +955,50 @@
             generateButton.disabled = false;
             generateButton.innerHTML = '<i class="fa-solid fa-rocket"></i> Generate Webhook Configuration';
 
-            if (data.status === 'success') {
+            if (data && data.status === 'success') {
                 showSuccessResponse(data, mode, config);
             } else {
-                showAlert('error', `Failed: ${data.message}`);
+                showAlert('error', `Failed: ${data?.message || 'Unknown error'}`);
             }
         }
+
         function showSuccessResponse(data, mode, config) {
             let html = `<div class="alert alert-success mt-4">
                 <i class="fa-solid fa-circle-check"></i> Configuration Saved Successfully!
                 <br><small class="text-muted">Token: <code>${data.token}</code></small>
             </div>`;
-            
-            html += `<div class="webhook-url-box">
-                <strong>Subscribe Webhook:</strong><br>${data.webhook_url}
-            </div>`;
-            html += `<button class="btn btn-copy" onclick="copyText('${data.webhook_url}')">
-                <i class="fa-solid fa-copy"></i> Copy Subscribe Webhook</button>`;
-            
+            html += `<div class="webhook-url-box"><strong>Subscribe Webhook:</strong><br>${data.webhook_url}</div>`;
+            html += `<button class="btn btn-copy" onclick="copyText('${data.webhook_url}')"><i class="fa-solid fa-copy"></i> Copy Subscribe Webhook</button>`;
             if (data.autoresponder_webhook_url) {
-                html += `<div class="webhook-url-box">
-                    <strong>Autoresponder Webhook:</strong><br>${data.autoresponder_webhook_url}
-                </div>`;
-                html += `<button class="btn btn-copy" onclick="copyText('${data.autoresponder_webhook_url}')">
-                    <i class="fa-solid fa-copy"></i> Copy Autoresponder Webhook
-                </button>`;
+                html += `<div class="webhook-url-box"><strong>Autoresponder Webhook:</strong><br>${data.autoresponder_webhook_url}</div>`;
+                html += `<button class="btn btn-copy" onclick="copyText('${data.autoresponder_webhook_url}')"><i class="fa-solid fa-copy"></i> Copy Autoresponder Webhook</button>`;
             }
-            
             html += `<div class="instructions">
                 <strong><i class="fa-solid fa-clipboard-list"></i> Next Steps:</strong>
                 <ol class="mt-2 mb-0">
-                    <li>Copy the webhook URL above (unique for this configuration)</li>
+                    <li>Copy the webhook URL above</li>
                     <li>Go to your Sendy dashboard and edit <strong>${data.list_name}</strong></li>
                     <li>Paste in the Subscribe webhook field</li>`;
-            
             if (mode === 'drip_sequence') {
-                html += `<li><strong>Important:</strong> Set up cron job to run every 15 minutes:
-                    <div class="webhook-url-box mt-2" style="font-size: 12px;">
-                        */15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_drip.php
-                    </div>
-                </li>`;
+                html += `<li><strong>Important:</strong> Set up a cron job to run every 15 minutes:
+                    <div class="webhook-url-box mt-2" style="font-size:12px;">*/15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_drip.php</div></li>`;
             }
-            
             if (mode === 'mirror_autoresponder') {
                 html += `<li>In Sendy Settings → Rules, add the autoresponder webhook above</li>`;
             }
-            
             if (mode === 'hybrid_drip') {
                 const whatsappSteps = config.sequence.filter(s => s.channel === 'whatsapp').length;
                 const emailSteps = config.sequence.filter(s => s.channel === 'email').length;
-                
-                html += `<li><strong>Hybrid Configuration:</strong> ${config.sequence.length} steps total 
-                    (${emailSteps} email, ${whatsappSteps} WhatsApp)</li>`;
-                html += `<li><strong>Important:</strong> Set up cron job to run every 15 minutes:
-                    <div class="webhook-url-box mt-2" style="font-size: 12px;">
-                        */15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_hybrid.php
-                    </div>
-                </li>`;
+                html += `<li><strong>Hybrid:</strong> ${config.sequence.length} steps (${emailSteps} email, ${whatsappSteps} WhatsApp)</li>`;
+                html += `<li><strong>Important:</strong> Set up a cron job to run every 15 minutes:
+                    <div class="webhook-url-box mt-2" style="font-size:12px;">*/15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_hybrid.php</div></li>`;
             }
-            
             html += `</ol>
                 <div class="alert alert-info mt-3 mb-0">
-                    <i class="fa-solid fa-info-circle"></i> <strong>Note:</strong> This webhook URL is unique! 
+                    <i class="fa-solid fa-info-circle"></i> <strong>Note:</strong> This webhook URL is unique!
                     You can create multiple webhooks for the same list with different configurations.
                 </div>
             </div>`;
-            
             responseContainer.innerHTML = html;
         }
 
@@ -1176,9 +1010,7 @@
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-                setTimeout(() => {
-                    event.target.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
-                }, 2000);
+                setTimeout(() => { event.target.innerHTML = '<i class="fa-solid fa-copy"></i> Copy'; }, 2000);
             });
         }
     </script>
