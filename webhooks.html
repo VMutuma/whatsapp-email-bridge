@@ -3,292 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Webhooks - WhatsApp Email Bridge</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <title>Manage Webhooks — Beem Africa</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <style>
-        * { font-family: 'Inter', sans-serif; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
-            --primary-color: #33B1BA;
-            --secondary-color: #F3A929;
+            --teal: #33B1BA;
+            --teal-dark: #2a9aa2;
+            --teal-dim: #eaf7f8;
+            --teal-mid: #c5eaed;
+            --amber: #F3A929;
+            --amber-dark: #d9921f;
+            --ink: #111827;
+            --ink-2: #374151;
+            --ink-3: #6B7280;
+            --ink-4: #9CA3AF;
+            --border: #E5E7EB;
+            --bg: #F9FAFB;
+            --white: #ffffff;
+            --red: #EF4444;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
         }
-        body { 
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%); 
-            padding: 40px 0; 
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
             min-height: 100vh;
+            font-size: 15px;
+            line-height: 1.6;
         }
-        .navbar {
-            background: white;
-            padding: 16px 24px;
-            margin-bottom: 40px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        /* NAV */
+        .nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 60px;
         }
-        .navbar-brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .nav-brand {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none; font-weight: 600; font-size: 16px;
+            color: var(--ink); letter-spacing: -0.02em;
         }
-        .navbar-nav {
-            display: flex;
-            gap: 16px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
+        .nav-brand-icon {
+            width: 32px; height: 32px; background: var(--teal);
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; color: white;
         }
-        .nav-link {
-            color: #4a5568;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            font-weight: 500;
+        .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+        .nav-links a {
+            display: flex; align-items: center; gap: 7px;
+            text-decoration: none; color: var(--ink-3);
+            font-size: 14px; font-weight: 500;
+            padding: 6px 12px; border-radius: 7px; transition: all 0.15s;
         }
-        .nav-link:hover {
-            background: #edf7f8;
-            color: var(--primary-color);
+        .nav-links a:hover { background: var(--bg); color: var(--ink); }
+        .nav-links a.active { background: var(--teal-dim); color: var(--teal-dark); }
+
+        /* PAGE */
+        .page { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+        .page-header {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            margin-bottom: 28px; gap: 16px;
         }
-        .nav-link.active {
-            background: var(--primary-color);
-            color: white;
+        .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 6px; }
+        .page-header p { color: var(--ink-3); font-size: 15px; }
+
+        .btn-new {
+            display: flex; align-items: center; gap: 7px;
+            padding: 9px 16px; white-space: nowrap;
+            background: var(--teal); color: white;
+            border: none; border-radius: var(--radius);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer; text-decoration: none;
+            transition: all 0.15s; flex-shrink: 0;
         }
-        .webhook-card { 
-            background: white; 
-            border-radius: 12px; 
-            padding: 24px; 
-            margin-bottom: 20px; 
-            border: 2px solid #e2e8f0;
-            transition: all 0.2s ease;
+        .btn-new:hover { background: var(--teal-dark); }
+
+        /* LOADING */
+        .loading {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 80px 24px; gap: 14px; color: var(--ink-3);
         }
-        .webhook-card:hover { 
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(51, 177, 186, 0.1);
+        .spin {
+            width: 28px; height: 28px;
+            border: 2.5px solid var(--border);
+            border-top-color: var(--teal);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
-        .token-badge { 
-            background: #edf7f8; 
-            color: var(--primary-color); 
-            padding: 4px 12px; 
-            border-radius: 6px; 
-            font-family: monospace; 
-            font-size: 13px; 
-        }
-        .mode-badge { 
-            padding: 4px 12px; 
-            border-radius: 6px; 
-            font-size: 12px; 
-            font-weight: 600; 
-        }
-        .mode-single { background: #dbeafe; color: #1e40af; }
-        .mode-drip_sequence { background: #fef3c7; color: #92400e; }
-        .mode-mirror_autoresponder { background: #e0e7ff; color: #3730a3; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* EMPTY */
         .empty-state {
-            text-align: center;
-            padding: 60px 20px;
+            text-align: center; padding: 80px 24px; color: var(--ink-3);
         }
-        .empty-state i {
-            font-size: 64px;
-            color: #cbd5e0;
-            margin-bottom: 20px;
+        .empty-icon {
+            width: 60px; height: 60px;
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px; color: var(--ink-4);
+        }
+        .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; margin-bottom: 24px; }
+
+        /* WEBHOOK CARD */
+        .webhook-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .webhook-card:hover {
+            border-color: var(--teal-mid);
+            box-shadow: 0 4px 16px rgba(51,177,186,0.08);
+        }
+        .webhook-card.deleting {
+            opacity: 0.5; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .wh-top {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; gap: 16px;
+        }
+        .wh-info { flex: 1; min-width: 0; }
+        .wh-name {
+            font-size: 15px; font-weight: 600; color: var(--ink);
+            margin-bottom: 6px; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        .wh-meta {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        /* MODE BADGES */
+        .mode-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .mode-single { background: #DBEAFE; color: #1D4ED8; }
+        .mode-drip_sequence { background: #FEF3C7; color: #92400E; }
+        .mode-mirror_autoresponder { background: #E0E7FF; color: #3730A3; }
+        .mode-hybrid_drip { background: #F3E8FF; color: #6D28D9; }
+
+        .token-chip {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px; color: var(--ink-4);
+            background: var(--bg); border: 1px solid var(--border);
+            padding: 3px 8px; border-radius: 6px;
+        }
+
+        .wh-url {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 12px; color: var(--ink-4);
+        }
+        .wh-url-text {
+            font-family: 'DM Mono', monospace;
+            font-size: 11.5px; color: var(--ink-3);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            max-width: 460px;
+        }
+        .wh-date { font-size: 12px; color: var(--ink-4); margin-top: 6px; }
+
+        /* ACTIONS */
+        .wh-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+        .btn-icon {
+            display: flex; align-items: center; gap: 5px;
+            padding: 7px 12px; border-radius: 7px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px; font-weight: 500;
+            cursor: pointer; transition: all 0.15s; border: 1.5px solid var(--border);
+            background: var(--white); color: var(--ink-2);
+        }
+        .btn-icon:hover { background: var(--bg); border-color: var(--ink-4); }
+        .btn-icon.copy.copied { background: #F0FDF4; border-color: #BBF7D0; color: #065F46; }
+        .btn-icon.danger { color: var(--red); border-color: #FECACA; background: #FEF2F2; }
+        .btn-icon.danger:hover { background: #FEE2E2; }
+
+        /* URL DETAIL PANEL */
+        .url-panel {
+            margin-top: 14px; padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .url-panel-label {
+            font-size: 11px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.06em; color: var(--ink-4); margin-bottom: 8px;
+        }
+        .url-full {
+            background: var(--ink); border-radius: 8px;
+            padding: 12px 14px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px; color: #86EFAC;
+            word-break: break-all; line-height: 1.6;
+        }
+
+        .alert-error {
+            background: #FEF2F2; border: 1.5px solid #FECACA;
+            border-radius: var(--radius); padding: 14px 16px;
+            font-size: 14px; color: #991B1B;
+            display: flex; align-items: flex-start; gap: 8px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .nav { padding: 0 16px; }
+            .page { padding: 24px 16px 60px; }
+            .wh-top { flex-direction: column; }
+            .wh-actions { width: 100%; justify-content: flex-end; }
+            .page-header { flex-direction: column; }
+            .wh-url-text { max-width: 200px; }
         }
     </style>
 </head>
 <body>
-    <div class="container" style="max-width: 1200px;">
-        <nav class="navbar">
-            <a href="index.html" class="navbar-brand">
-                <i class="fa-brands fa-whatsapp"></i>
-                WhatsApp Email Bridge
-            </a>
-            <ul class="navbar-nav">
-                <li><a href="index.html" class="nav-link">
-                    <i class="fa-solid fa-plus"></i> Create Webhook
-                </a></li>
-                <li><a href="bulk_subscribe.html" class="nav-link">
-                     <i class="fa-solid fa-users"></i> Bulk Subscribe
-                 </a></li>
-                <li><a href="webhooks.html" class="nav-link active">
-                    <i class="fa-solid fa-list"></i> Manage Webhooks
-                </a></li>
-            </ul>
-        </nav>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1><i class="fa-solid fa-webhook"></i> Webhook Management</h1>
-                <p class="text-muted">View and manage all configured webhooks</p>
-            </div>
-            <a href="index.html" class="btn btn-primary">
-                <i class="fa-solid fa-plus"></i> Create New Webhook
-            </a>
+<nav class="nav">
+    <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.855L.057 23.214a.75.75 0 00.93.93l5.36-1.476A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.694-.5-5.24-1.375l-.375-.217-3.885 1.07 1.07-3.885-.217-.375A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         </div>
+        WhatsApp Bridge
+    </a>
+    <ul class="nav-links">
+        <li><a href="index.html">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Create Webhook
+        </a></li>
+        <li><a href="bulk_subscribe.html">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            Bulk Subscribe
+        </a></li>
+        <li><a href="webhooks.html" class="active">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            Manage Webhooks
+        </a></li>
+    </ul>
+</nav>
 
-        <div id="webhooksList">
-            <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status"></div>
-                <p class="mt-3">Loading webhooks...</p>
-            </div>
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Webhooks</h1>
+            <p>View, copy, and manage all configured webhook configurations.</p>
         </div>
+        <a href="index.html" class="btn-new">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            New Webhook
+        </a>
     </div>
 
-    <script>
-        const PHP_API_FILE = 'webhook_api.php';
+    <div id="webhooksList">
+        <div class="loading">
+            <div class="spin"></div>
+            <span style="font-size:14px">Loading webhooks…</span>
+        </div>
+    </div>
+</div>
 
-        async function loadWebhooks() {
-            try {
-                const response = await fetch(`${PHP_API_FILE}?action=list_webhooks`);
-                const webhooks = await response.json();
-                displayWebhooks(webhooks);
-            } catch (error) {
-                document.getElementById('webhooksList').innerHTML = `
-                    <div class="alert alert-danger">
-                        <i class="fa-solid fa-exclamation-triangle"></i> 
-                        Failed to load webhooks: ${error.message}
+<script>
+    const PHP_API_FILE = 'webhook_api.php';
+
+    const MODE_LABELS = {
+        single: 'Single Message',
+        drip_sequence: 'Drip Sequence',
+        mirror_autoresponder: 'Mirror Autoresponder',
+        hybrid_drip: 'Hybrid Drip'
+    };
+
+    async function apiCall(url, options = {}) {
+        const res = await fetch(url, options);
+        if (res.status === 401) { window.location.href = 'login.php'; return null; }
+        return res.json();
+    }
+
+    async function loadWebhooks() {
+        const data = await apiCall(`${PHP_API_FILE}?action=list_webhooks`);
+        if (!data) return;
+        if (Array.isArray(data)) displayWebhooks(data);
+        else showError('Failed to load webhooks: ' + (data.message || 'Unknown error'));
+    }
+
+    function displayWebhooks(webhooks) {
+        const container = document.getElementById('webhooksList');
+
+        if (!webhooks.length) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
-                `;
-            }
+                    <h3>No webhooks yet</h3>
+                    <p>Create your first webhook to start sending automated WhatsApp messages.</p>
+                    <a href="index.html" class="btn-new" style="display:inline-flex">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                        Create Webhook
+                    </a>
+                </div>`;
+            return;
         }
 
-        function displayWebhooks(webhooks) {
-    const container = document.getElementById('webhooksList');
-    
-    if (webhooks.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-inbox"></i>
-                <h4>No Webhooks Yet</h4>
-                <p class="text-muted">Create your first webhook to get started</p>
-                <a href="index.html" class="btn btn-primary mt-3">
-                    <i class="fa-solid fa-plus"></i> Create Webhook
-                </a>
-            </div>
-        `;
-        return;
-    }
+        container.innerHTML = webhooks.map(wh => {
+            const created = wh.created_at ? new Date(wh.created_at * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+            const modeClass = 'mode-' + (wh.mode || 'single');
+            const modeLabel = MODE_LABELS[wh.mode] || wh.mode;
+            const name = wh.webhook_name || wh.list_name || 'Unnamed Webhook';
 
-    container.innerHTML = webhooks.map(webhook => `
-        <div class="webhook-card" id="webhook-${webhook.token}">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h5 class="mb-2">
-                        <i class="fa-solid fa-list text-primary"></i> 
-                        ${webhook.webhook_name || webhook.list_name}
-                    </h5>
-                    <div class="mb-2">
-                        <span class="token-badge">${webhook.token}</span>
-                        <span class="mode-badge mode-${webhook.mode} ms-2">
-                            ${webhook.mode.replace('_', ' ')}
-                        </span>
-                        ${webhook.webhook_name ? `<small class="text-muted ms-2">(${webhook.list_name})</small>` : ''}
-                    </div>
-                    <div class="small text-muted">
-                        <div>
-                            <i class="fa-solid fa-clock"></i> 
-                            Created: ${new Date(webhook.created_at * 1000).toLocaleString()}
+            return `
+            <div class="webhook-card" id="wh-${wh.token}">
+                <div class="wh-top">
+                    <div class="wh-info">
+                        <div class="wh-name">${name}</div>
+                        <div class="wh-meta">
+                            <span class="mode-badge ${modeClass}">${modeLabel}</span>
+                            <span class="token-chip">${wh.token}</span>
+                            ${wh.webhook_name && wh.list_name ? `<span style="font-size:12px;color:var(--ink-4)">${wh.list_name}</span>` : ''}
                         </div>
-                        <div>
-                            <i class="fa-solid fa-link"></i>
-                            <a href="#" onclick="copyWebhook('${webhook.webhook_url}'); return false;" 
-                               class="text-decoration-none">
-                                ${webhook.webhook_url.replace('https://', '').substring(0, 40)}...
-                            </a>
+                        <div class="wh-url">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                            <span class="wh-url-text">${wh.webhook_url}</span>
+                        </div>
+                        <div class="wh-date">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                            Created ${created}
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 text-end">
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-outline-primary" 
-                                onclick="copyWebhook('${webhook.webhook_url}')">
-                            <i class="fa-solid fa-copy"></i> Copy
+                    <div class="wh-actions">
+                        <button class="btn-icon copy" id="copy-${wh.token}" onclick="copyUrl('${wh.token}', '${wh.webhook_url}')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                            Copy URL
                         </button>
-                        <button class="btn btn-sm btn-outline-info" 
-                                onclick="showWebhookDetails('${webhook.token}', '${webhook.webhook_name || webhook.list_name}', '${webhook.mode}')">
-                            <i class="fa-solid fa-eye"></i> Details
+                        <button class="btn-icon" onclick="toggleUrl('${wh.token}', '${wh.webhook_url}')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            View
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" 
-                                onclick="deleteWebhook('${webhook.token}', '${webhook.webhook_name || webhook.list_name}')">
-                            <i class="fa-solid fa-trash"></i> Delete
+                        <button class="btn-icon danger" onclick="deleteWebhook('${wh.token}', '${name.replace(/'/g, "\\'")}')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                            Delete
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function deleteWebhook(token, name) {
-    if (!confirm(`Are you sure you want to delete webhook "${name}"?\n\nThis will prevent new subscriptions from being processed.`)) {
-        return;
+                <div class="url-panel" id="panel-${wh.token}" style="display:none">
+                    <div class="url-panel-label">Full Webhook URL</div>
+                    <div class="url-full">${wh.webhook_url}</div>
+                </div>
+            </div>`;
+        }).join('');
     }
-    
-    const card = document.getElementById(`webhook-${token}`);
-    const originalHTML = card.innerHTML;
-    
-    card.innerHTML = `
-        <div class="text-center py-3">
-            <div class="spinner-border spinner-border-sm text-danger" role="status"></div>
-            <span class="ms-2">Deleting webhook...</span>
-        </div>
-    `;
-    
-    fetch(`${PHP_API_FILE}?action=delete_webhook&token=${token}`, {
-        method: 'GET'
-    })
-    .then(response => response.json())
-    .then(data => {
+
+    function toggleUrl(token, url) {
+        const panel = document.getElementById(`panel-${token}`);
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function copyUrl(token, url) {
+        navigator.clipboard.writeText(url).then(() => {
+            const btn = document.getElementById(`copy-${token}`);
+            btn.classList.add('copied');
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Copied!`;
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy URL`;
+            }, 2500);
+        });
+    }
+
+    async function deleteWebhook(token, name) {
+        if (!confirm(`Delete webhook "${name}"?\n\nThis cannot be undone. New subscriptions will stop being processed.`)) return;
+        const card = document.getElementById(`wh-${token}`);
+        card.classList.add('deleting');
+        const data = await apiCall(`${PHP_API_FILE}?action=delete_webhook&token=${token}`);
+        if (!data) { card.classList.remove('deleting'); return; }
         if (data.status === 'success') {
-            card.style.opacity = '0.5';
+            card.style.transition = 'all 0.3s';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(-4px)';
             setTimeout(() => {
                 card.remove();
-                // Check if we need to show empty state
-                const remaining = document.querySelectorAll('.webhook-card').length;
-                if (remaining === 0) {
+                if (!document.querySelectorAll('.webhook-card').length) {
                     document.getElementById('webhooksList').innerHTML = `
                         <div class="empty-state">
-                            <i class="fa-solid fa-inbox"></i>
-                            <h4>No Webhooks Found</h4>
-                            <p class="text-muted">All webhooks have been deleted</p>
-                            <a href="index.html" class="btn btn-primary mt-3">
-                                <i class="fa-solid fa-plus"></i> Create New Webhook
+                            <div class="empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+                            <h3>All webhooks deleted</h3>
+                            <p>Create a new one to get started again.</p>
+                            <a href="index.html" class="btn-new" style="display:inline-flex">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                                Create Webhook
                             </a>
-                        </div>
-                    `;
+                        </div>`;
                 }
             }, 300);
         } else {
-            card.innerHTML = originalHTML;
-            alert(`Failed to delete webhook: ${data.message}`);
+            card.classList.remove('deleting');
+            showError('Failed to delete: ' + (data.message || 'Unknown error'));
         }
-    })
-    .catch(error => {
-        card.innerHTML = originalHTML;
-        alert(`Error: ${error.message}`);
-    });
-}
-        function copyWebhook(url) {
-            navigator.clipboard.writeText(url).then(() => {
-                const btn = event.target.closest('button');
-                const originalHTML = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-                setTimeout(() => {
-                    btn.innerHTML = originalHTML;
-                }, 2000);
-            });
-        }
+    }
 
-        function showWebhookDetails(token, url) {
-            alert(`Webhook Details:\n\nToken: ${token}\n\nURL: ${url}\n\nFull configuration can be found in data/template_map.json`);
-        }
+    function showError(msg) {
+        document.getElementById('webhooksList').insertAdjacentHTML('afterbegin', `
+            <div class="alert-error">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                ${msg}
+            </div>`);
+    }
 
-        document.addEventListener('DOMContentLoaded', loadWebhooks);
-    </script>
+    document.addEventListener('DOMContentLoaded', loadWebhooks);
+</script>
 </body>
 </html>
