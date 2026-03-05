@@ -1,3 +1,27 @@
+<?php
+session_start();
+
+$alert = '';
+
+if (isset($_GET['error'])) {
+    $error_messages = [
+        'unauthorized' => 'Access denied. Only @beem.africa email accounts are allowed.',
+        'oauth_failed' => 'Google authentication failed. Please try again.',
+        'session_expired' => 'Your session has expired. Please sign in again.',
+        'invalid_state' => 'Invalid authentication state. Please try again.'
+    ];
+    
+    $error = $_GET['error'];
+    $message = $error_messages[$error] ?? 'An error occurred. Please try again.';
+    $alert = "<div class='alert alert-error'>$message</div>";
+}
+
+if (isset($_GET['info'])) {
+    if ($_GET['info'] === 'logged_out') {
+        $alert = "<div class='alert alert-info'>You have been successfully logged out.</div>";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,28 +191,7 @@
         <h1>WhatsApp Email Bridge</h1>
         <p class="subtitle">Sign in to access the dashboard</p>
 
-        <?php
-        session_start();
-        
-        if (isset($_GET['error'])) {
-            $error_messages = [
-                'unauthorized' => 'Access denied. Only @beem.africa email accounts are allowed.',
-                'oauth_failed' => 'Google authentication failed. Please try again.',
-                'session_expired' => 'Your session has expired. Please sign in again.',
-                'invalid_state' => 'Invalid authentication state. Please try again.'
-            ];
-            
-            $error = $_GET['error'];
-            $message = $error_messages[$error] ?? 'An error occurred. Please try again.';
-            echo "<div class='alert alert-error'>$message</div>";
-        }
-
-        if (isset($_GET['info'])) {
-            if ($_GET['info'] === 'logged_out') {
-                echo "<div class='alert alert-info'>You have been successfully logged out.</div>";
-            }
-        }
-        ?>
+        <?= $alert ?>
 
         <button class="google-btn" onclick="loginWithGoogle()">
             <svg class="google-icon" viewBox="0 0 24 24">
@@ -206,13 +209,12 @@
         </div>
 
         <div class="footer">
-            Powered by Beem Africa
+            Powered by Beem
         </div>
     </div>
 
     <script>
         function loginWithGoogle() {
-            // Redirect to Google OAuth handler
             window.location.href = 'google_oauth.php';
         }
     </script>

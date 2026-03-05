@@ -18,13 +18,30 @@ error_reporting(E_ALL);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/data/api_error.log');
 
-// Load ONLY essential dependencies
+// Load dependencies
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/auth_config.php';
+
+// ─── AUTH CHECK ───────────────────────────────────────────────────────────────
+// Allow sendy_handler and autoresponder_handler without auth (called by Sendy)
+$action = $_GET['action'] ?? null;
+$publicActions = ['sendy_handler', 'autoresponder_handler'];
+
+if (!in_array($action, $publicActions)) {
+    session_start();
+    if (!isAuthenticated()) {
+        ob_end_clean();
+        header('Content-Type: application/json');
+        http_response_code(401);
+        echo json_encode(['status' => 'error', 'message' => 'Unauthorized', 'redirect' => 'login.php']);
+        exit;
+    }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 require_once __DIR__ . '/lib/StorageService.php';
 require_once __DIR__ . '/lib/BeemService.php';
 require_once __DIR__ . '/lib/SendyService.php';
-
-// Don't load handlers yet - load them only when needed
 
 // Clear any output
 ob_end_clean();
@@ -266,11 +283,11 @@ function handle_api_save_configuration() {
         return ['status' => 'error', 'message' => 'Failed to save configuration'];
     }
     
-    $webhookURL = rtrim($webhookUrlRoot, '/') . '/api_v2.php?action=sendy_handler&token=' . $token;
+    $webhookURL = rtrim($webhookUrlRoot, '/') . '/webhook_api.php?action=sendy_handler&token=' . $token;
     
     $autoresponderWebhookURL = null;
     if ($mode === 'mirror_autoresponder') {
-        $autoresponderWebhookURL = rtrim($webhookUrlRoot, '/') . '/api_v2.php?action=autoresponder_handler&token=' . $token;
+        $autoresponderWebhookURL = rtrim($webhookUrlRoot, '/') . '/webhook_api.php?action=autoresponder_handler&token=' . $token;
     }
     
     http_response_code(200);
@@ -302,7 +319,7 @@ function handle_api_list_webhooks() {
             'webhook_name' => $config['webhook_name'] ?? $config['list_name'] ?? 'Unknown',
             'mode' => $config['mode'] ?? 'unknown',
             'created_at' => $config['created_at'] ?? null,
-            'webhook_url' => ($config['webhook_url_root'] ?? '') . '/api_v2.php?action=sendy_handler&token=' . $token
+            'webhook_url' => ($config['webhook_url_root'] ?? '') . '/webhook_api.php?action=sendy_handler&token=' . $token
         ];
     }
     
@@ -379,7 +396,6 @@ function handle_api_hybrid_status() {
 }
 
 // ROUTER
-$action = $_GET['action'] ?? null;
 $response = null;
 
 try {
