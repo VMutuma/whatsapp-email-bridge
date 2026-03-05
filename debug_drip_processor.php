@@ -1,4 +1,5 @@
-<?php
+<?php require_once 'protect.php';
+
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/lib/StorageService.php';
 require_once __DIR__ . '/lib/BeemService.php';

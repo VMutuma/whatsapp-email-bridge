@@ -1,4 +1,4 @@
-<?php
+<?php require_once 'protect.php';
 /**
  * Drip Processor - Cron Job
  */

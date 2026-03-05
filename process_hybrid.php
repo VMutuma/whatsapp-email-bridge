@@ -1,4 +1,4 @@
-<?php
+<?php require_once 'protect.php';
 /**
  * Hybrid Drip Processor
  * Processes hybrid email/WhatsApp drip sequences
