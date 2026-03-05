@@ -3,1181 +3,1068 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Drip Configuration</title>
-    
-    <!-- Inter Font -->
+    <title>WhatsApp Drip — Beem Africa</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary-color: #33B1BA;
-            --secondary-color: #F3A929;
-            --tertiary-color: #9C27B0;
-            --primary-dark: #2a9aa2;
-            --secondary-dark: #e09520;
-            --tertiary-dark: #7B1FA2;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * {
-            font-family: 'Inter', sans-serif;
+        :root {
+            --teal: #33B1BA;
+            --teal-dark: #2a9aa2;
+            --teal-dim: #eaf7f8;
+            --teal-mid: #c5eaed;
+            --amber: #F3A929;
+            --amber-dark: #d9921f;
+            --amber-dim: #fef8ec;
+            --ink: #111827;
+            --ink-2: #374151;
+            --ink-3: #6B7280;
+            --ink-4: #9CA3AF;
+            --border: #E5E7EB;
+            --bg: #F9FAFB;
+            --white: #ffffff;
+            --red: #EF4444;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.07);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.09);
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
             min-height: 100vh;
-            padding: 40px 0;
+            font-size: 15px;
+            line-height: 1.6;
         }
 
-        .navbar {
-            background: white;
-            padding: 16px 24px;
-            margin-bottom: 40px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        /* ── NAV ── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            height: 60px;
         }
 
-        .navbar-brand {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
+        .nav-brand {
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-
-        .navbar-nav {
-            display: flex;
-            gap: 16px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-link {
-            color: #4a5568;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .nav-link:hover {
-            background: #edf7f8;
-            color: var(--primary-color);
-        }
-
-        .nav-link.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            padding: 48px;
-        }
-
-        .header-section {
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 32px;
-            margin-bottom: 40px;
-        }
-
-        .header-section h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a202c;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .header-section h1 i {
-            color: var(--primary-color);
-        }
-
-        .subtitle {
+            font-weight: 600;
             font-size: 16px;
-            color: #718096;
-            margin: 0;
+            color: var(--ink);
+            letter-spacing: -0.02em;
         }
 
-        .form-label {
-            font-weight: 600;
-            color: #2d3748;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .form-label i {
-            color: var(--primary-color);
-        }
-
-        .form-control, .form-select {
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 14px 16px;
-            background: #f7fafc;
-            font-size: 15px;
-            transition: all 0.2s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            background: white;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(51, 177, 186, 0.1);
-        }
-
-        .info-box {
-            background: #edf7f8;
-            border-left: 4px solid var(--primary-color);
-            padding: 14px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #2c5282;
-            margin-top: 12px;
-        }
-
-        .mode-card {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            height: 100%;
-        }
-
-        .mode-card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(51, 177, 186, 0.1);
-        }
-
-        .mode-card.active {
-            border-color: var(--primary-color);
-            background: #edf7f8;
-            box-shadow: 0 4px 16px rgba(51, 177, 186, 0.15);
-        }
-
-        .mode-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            font-size: 20px;
-        }
-
-        .mode-card.active .mode-icon {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
-        }
-
-        /* .mode-card[data-mode="hybrid_drip"].active .mode-icon {
-            background: linear-gradient(135deg, var(--tertiary-color) 0%, var(--tertiary-dark) 100%);
-        } */
-
-        .mode-title {
-            font-weight: 600;
-            color: #2d3748;
-            margin: 0;
-        }
-
-        .mode-description {
-            font-size: 14px;
-            color: #718096;
-            margin: 8px 0 0 0;
-        }
-
-        .drip-builder {
-            background: #f7fafc;
-            border: 2px dashed #cbd5e0;
-            border-radius: 12px;
-            padding: 24px;
-        }
-
-        .drip-step {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .step-number {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
+        .nav-brand-icon {
             width: 32px;
             height: 32px;
-            border-radius: 50%;
+            background: var(--teal);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .btn-remove {
-            background: #fed7d7;
-            color: #c53030;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .btn-remove:hover {
-            background: #fc8181;
             color: white;
+            font-size: 16px;
         }
 
-        .btn-add-step {
-            width: 100%;
-            padding: 14px;
-            background: white;
-            color: var(--primary-color);
-            border: 2px dashed var(--primary-color);
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        .btn-add-step:hover {
-            background: #edf7f8;
-            border-style: solid;
-        }
-
-        .mapping-row {
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-weight: 600;
-            color: white;
-            width: 100%;
-            margin-top: 32px;
-        }
-
-        .btn-primary-custom:hover:not(:disabled) {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, #238a91 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(51, 177, 186, 0.3);
-        }
-
-        .btn-copy {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
-            border: none;
-            color: white;
-            font-weight: 600;
-            padding: 12px;
-            border-radius: 8px;
-            width: 100%;
-            margin-top: 12px;
-        }
-
-        .btn-copy:hover {
-            background: linear-gradient(135deg, var(--secondary-dark) 0%, #c88419 100%);
-        }
-
-        .webhook-url-box {
-            background: #1e293b;
-            color: #e2e8f0;
-            border-radius: 10px;
-            padding: 16px;
-            margin-top: 16px;
-            word-break: break-all;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-        }
-
-        .instructions {
-            background: #fffbeb;
-            border-left: 4px solid var(--secondary-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 24px;
-        }
-
-        .spinner-border-sm {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* NEW: Time unit input group styling */
-        .input-group-time {
+        .nav-links {
             display: flex;
+            align-items: center;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            color: var(--ink-3);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: all 0.15s;
+        }
+
+        .nav-links a:hover { background: var(--bg); color: var(--ink); }
+        .nav-links a.active { background: var(--teal-dim); color: var(--teal-dark); }
+        .nav-links a svg { flex-shrink: 0; }
+
+        /* ── PAGE LAYOUT ── */
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        .page-header {
+            margin-bottom: 36px;
+        }
+
+        .page-header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .page-header p {
+            color: var(--ink-3);
+            font-size: 15px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-label {
+            display: flex;
+            align-items: center;
             gap: 8px;
-        }
-
-        .input-group-time .form-control {
-            flex: 1;
-        }
-
-        .input-group-time .form-select {
-            flex: 0 0 140px;
-        }
-
-        .time-unit-badge {
-            background: #edf7f8;
-            color: var(--primary-color);
-            padding: 4px 10px;
-            border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
-            display: inline-block;
-        }
-
-        /* Hybrid specific styles */
-        .channel-selector {
-            display: flex;
-            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--ink-4);
             margin-bottom: 16px;
         }
 
-        .channel-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            background: white;
-            color: #4a5568;
+        .card-label svg { color: var(--teal); }
+
+        /* ── FORM ELEMENTS ── */
+        .field { margin-bottom: 0; }
+
+        .field + .field { margin-top: 16px; }
+
+        label.field-label {
+            display: block;
+            font-size: 13px;
             font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
+            color: var(--ink-2);
+            margin-bottom: 7px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--ink);
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            appearance: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(51,177,186,0.12);
+        }
+
+        input[type="text"]::placeholder { color: var(--ink-4); }
+
+        select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+        select:disabled { background-color: var(--bg); color: var(--ink-4); cursor: not-allowed; }
+
+        .hint {
+            margin-top: 8px;
+            font-size: 12.5px;
+            color: var(--ink-4);
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-start;
             gap: 6px;
         }
 
-        .channel-btn:hover {
-            border-color: var(--primary-color);
-            background: #f7fafc;
+        .hint svg { flex-shrink: 0; margin-top: 2px; }
+
+        /* ── MODE GRID ── */
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
 
-        .channel-btn.active {
-            border-color: var(--primary-color);
-            background: #edf7f8;
-            color: var(--primary-color);
+        .mode-card {
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
         }
 
-        .channel-btn.whatsapp.active {
-            border-color: var(--primary-color);
-            background: #edf7f8;
-            color: var(--primary-color);
+        .mode-card:hover { border-color: var(--teal-mid); background: var(--teal-dim); }
+
+        .mode-card.active {
+            border-color: var(--teal);
+            background: var(--teal-dim);
         }
 
-        .channel-btn.email.active {
-            border-color: var(--tertiary-color);
-            background: #f3e5f5;
-            color: var(--tertiary-color);
+        .mode-card.active::after {
+            content: '';
+            position: absolute;
+            top: 10px; right: 10px;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--teal);
         }
 
-        .channel-icon {
-            font-size: 14px;
+        .mode-icon {
+            width: 34px; height: 34px;
+            border-radius: 8px;
+            background: var(--teal-dim);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--teal);
+            margin-bottom: 10px;
+            transition: background 0.15s;
         }
 
-        .email-subject-input {
-            margin-top: 12px;
+        .mode-card.active .mode-icon { background: var(--teal); color: white; }
+
+        .mode-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 4px;
         }
 
-        .template-required {
-            color: #e53e3e;
+        .mode-desc {
             font-size: 12px;
-            margin-left: 4px;
+            color: var(--ink-3);
+            line-height: 1.5;
+        }
+
+        /* ── DRIP BUILDER ── */
+        .builder-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .drip-step {
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px;
+            background: var(--bg);
+            position: relative;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .step-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-num {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .step-title { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+
+        .btn-remove {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 12px; font-weight: 500;
+            color: var(--red);
+            background: #FEF2F2;
+            border: none; border-radius: 6px;
+            padding: 5px 10px; cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-remove:hover { background: #FEE2E2; }
+
+        .step-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .time-row {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 8px;
+        }
+
+        /* ── CHANNEL TOGGLE ── */
+        .channel-toggle {
+            display: inline-flex;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .ch-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px;
+            font-size: 13px; font-weight: 500;
+            background: white; color: var(--ink-3);
+            border: none; cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .ch-btn + .ch-btn { border-left: 1.5px solid var(--border); }
+        .ch-btn.active.wa { background: var(--teal-dim); color: var(--teal-dark); }
+        .ch-btn.active.em { background: #F3E8FF; color: #7C3AED; }
+
+        /* ── MAPPING ROW ── */
+        .mapping-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .mapping-label {
+            font-size: 13px; font-weight: 500; color: var(--ink-2);
+        }
+
+        /* ── ADD STEP BTN ── */
+        .btn-add {
+            display: flex; align-items: center; justify-content: center; gap: 7px;
+            width: 100%; padding: 11px;
+            border: 1.5px dashed var(--teal-mid);
+            border-radius: var(--radius);
+            background: transparent; color: var(--teal);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: all 0.15s;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover { background: var(--teal-dim); border-style: solid; }
+
+        /* ── PRIMARY BTN ── */
+        .btn-primary {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; padding: 13px 20px;
+            background: var(--teal);
+            color: white;
+            border: none; border-radius: var(--radius);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+            margin-top: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .btn-primary:hover:not(:disabled) { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(51,177,186,0.35); }
+        .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* ── RESULT ── */
+        .result-card {
+            margin-top: 20px;
+            border: 1.5px solid #D1FAE5;
+            border-radius: var(--radius-lg);
+            background: #F0FDF4;
+            padding: 24px;
+        }
+
+        .result-success {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 15px; font-weight: 600; color: #065F46;
+            margin-bottom: 20px;
+        }
+
+        .url-block {
+            background: var(--ink);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            margin-bottom: 10px;
+        }
+
+        .url-block-label {
+            font-size: 11px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.06em; color: var(--ink-4);
+            margin-bottom: 6px;
+        }
+
+        .url-text {
+            font-family: 'DM Mono', monospace;
+            font-size: 12.5px; color: #86EFAC;
+            word-break: break-all; line-height: 1.5;
+        }
+
+        .btn-copy {
+            display: flex; align-items: center; gap: 7px;
+            padding: 9px 16px;
+            background: white; color: var(--ink-2);
+            border: 1.5px solid var(--border); border-radius: 7px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: all 0.15s;
+            margin-bottom: 16px;
+        }
+
+        .btn-copy:hover { background: var(--bg); }
+        .btn-copy.copied { color: #065F46; border-color: #6EE7B7; background: #ECFDF5; }
+
+        .next-steps {
+            margin-top: 20px;
+            border-top: 1px solid #D1FAE5;
+            padding-top: 16px;
+        }
+
+        .next-steps h4 {
+            font-size: 13px; font-weight: 600; color: #065F46;
+            margin-bottom: 10px;
+        }
+
+        .next-steps ol {
+            padding-left: 18px;
+            font-size: 13.5px; color: #047857;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+
+        .cron-block {
+            margin-top: 8px;
+            background: var(--ink);
+            border-radius: 7px;
+            padding: 10px 14px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px; color: #86EFAC;
+        }
+
+        .alert-error {
+            margin-top: 16px;
+            background: #FEF2F2; border: 1.5px solid #FECACA;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            font-size: 14px; color: #991B1B;
+            display: flex; align-items: flex-start; gap: 8px;
+        }
+
+        .d-none { display: none !important; }
+
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 640px) {
+            .mode-grid { grid-template-columns: repeat(2, 1fr); }
+            .nav { padding: 0 16px; }
+            .page { padding: 24px 16px 60px; }
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <nav class="navbar">
-            <a href="index.html" class="navbar-brand">
-                <i class="fa-brands fa-whatsapp"></i>
-                WhatsApp Email Bridge
+
+<!-- NAV -->
+<nav class="nav">
+    <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.855L.057 23.214a.75.75 0 00.93.93l5.36-1.476A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.694-.5-5.24-1.375l-.375-.217-3.885 1.07 1.07-3.885-.217-.375A9.956 9.956 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        </div>
+        WhatsApp Bridge
+    </a>
+    <ul class="nav-links">
+        <li>
+            <a href="index.html" class="active">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                Create Webhook
             </a>
-            <ul class="navbar-nav">
-                <li><a href="index.html" class="nav-link active">
-                    <i class="fa-solid fa-plus"></i> Create Webhook
-                </a></li>
-                <li><a href="bulk_subscribe.html" class="nav-link">
-                   <i class="fa-solid fa-users"></i> Bulk Subscribe
-                </a></li>
-                <li><a href="webhooks.html" class="nav-link">
-                    <i class="fa-solid fa-list"></i> Manage Webhooks
-                </a></li>
-            </ul>
-           
-        </nav>
+        </li>
+        <li>
+            <a href="bulk_subscribe.html">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                Bulk Subscribe
+            </a>
+        </li>
+        <li>
+            <a href="webhooks.html">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Manage Webhooks
+            </a>
+        </li>
+    </ul>
+</nav>
 
-        <div class="main-container">
-            <div class="header-section">
-                <h1>
-                    <i class="fa-brands fa-whatsapp"></i>
-                    WhatsApp Drip Configuration
-                </h1>
-                <p class="subtitle">Configure automated WhatsApp messaging for your Sendy lists</p>
-            </div>
+<!-- PAGE -->
+<div class="page">
+    <div class="page-header">
+        <h1>Create Webhook</h1>
+        <p>Configure automated WhatsApp messaging for your Sendy subscriber lists.</p>
+    </div>
 
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="fa-solid fa-link"></i>
-                    1. Public URL Root
-                </label>
-                <input type="text" class="form-control" id="webhookUrlRoot"
-                    placeholder="https://yourdomain.com/path-to-webhook-folder">
-                <div class="info-box">
-                    <i class="fa-solid fa-circle-info"></i>
-                    Enter the public URL where your <code>webhook_api.php</code> file is hosted.
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="fa-solid fa-building"></i>
-                    2. Select Sendy Brand
-                </label>
-                <select class="form-select" id="brandSelect" disabled>
-                    <option>Loading Brands...</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="fa-solid fa-list"></i>
-                    3. Select Target Mailing List
-                </label>
-                <select class="form-select" id="listSelect" disabled>
-                    <option>Select a Brand First</option>
-                </select>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="fa-solid fa-signature"></i>
-                    4. Webhook Name
-                </label>
-                <input type="text" class="form-control" id="webhookName" 
-                    placeholder="e.g., Welcome Sequence for New Users">
-                <div class="info-box">
-                    <i class="fa-solid fa-circle-info"></i>
-                    Give this webhook a descriptive name to easily identify it later.
-                </div>
-            </div>
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="fa-solid fa-sliders"></i>
-                    4. Choose Drip Mode
-                </label>
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <div class="mode-card active" data-mode="single">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-bolt"></i>
-                                </div>
-                                <h6 class="mode-title">Single Message</h6>
-                            </div>
-                            <p class="mode-description">
-                                Send one WhatsApp message immediately when someone subscribes.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mode-card" data-mode="drip_sequence">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-calendar-days"></i>
-                                </div>
-                                <h6 class="mode-title">Drip Sequence</h6>
-                            </div>
-                            <p class="mode-description">
-                                Create a timed sequence of WhatsApp messages independent of email.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mode-card" data-mode="mirror_autoresponder">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-mirror"></i>
-                                </div>
-                                <h6 class="mode-title">Mirror Autoresponder</h6>
-                            </div>
-                            <p class="mode-description">
-                                Send WhatsApp messages in sync with Sendy email autoresponders.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mode-card" data-mode="hybrid_drip">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="mode-icon">
-                                    <i class="fa-solid fa-code-branch"></i>
-                                </div>
-                                <h6 class="mode-title">Hybrid Drip</h6>
-                            </div>
-                            <p class="mode-description">
-                                Alternate between Email and WhatsApp messages in a unified sequence.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="singleConfig" class="mb-4">
-                <label class="form-label">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    5. Select WhatsApp Template
-                </label>
-                <select class="form-select" id="singleTemplate" disabled>
-                    <option>Loading Templates...</option>
-                </select>
-            </div>
-
-            <div id="dripConfig" class="mb-4 d-none">
-                <label class="form-label">
-                    <i class="fa-solid fa-list-check"></i>
-                    5. Build Your Drip Sequence
-                </label>
-                <div class="info-box mb-3">
-                    <i class="fa-solid fa-clock"></i>
-                    <strong>Flexible Timing:</strong> Set delays in minutes, hours, days, weeks, or months. 
-                    Perfect for quick follow-ups or long-term nurture campaigns!
-                </div>
-                <div class="drip-builder" id="dripBuilder"></div>
-                <button class="btn btn-add-step mt-3" onclick="addDripStep()">
-                    <i class="fa-solid fa-plus"></i> Add Step
-                </button>
-            </div>
-
-            <div id="mirrorConfig" class="mb-4 d-none">
-                <label class="form-label">
-                    <i class="fa-solid fa-layer-group"></i>
-                    5. Map Autoresponder Steps to WhatsApp Templates
-                </label>
-                <div class="info-box mb-3">
-                    <i class="fa-solid fa-lightbulb"></i>
-                    Map each email autoresponder step to a WhatsApp template.
-                </div>
-                <div id="autoresponderMapping"></div>
-                <button class="btn btn-add-step w-100 mt-3" onclick="addAutoresponderMapping()">
-                    <i class="fa-solid fa-plus"></i> Add Mapping
-                </button>
-            </div>
-
-            <div id="hybridConfig" class="mb-4 d-none">
-                <label class="form-label">
-                    <i class="fa-solid fa-code-branch"></i>
-                    5. Build Hybrid Email + WhatsApp Sequence
-                </label>
-                <div class="info-box mb-3">
-                    <i class="fa-solid fa-shuffle"></i>
-                    <strong>Unified Campaign:</strong> Create sequences that alternate between Email and WhatsApp messages. 
-                    Example: Email → WhatsApp (2h) → Email (1d) → WhatsApp (3d)
-                </div>
-                <div class="drip-builder" id="hybridBuilder"></div>
-                <button class="btn btn-add-step mt-3" onclick="addHybridStep()">
-                    <i class="fa-solid fa-plus"></i> Add Step
-                </button>
-            </div>
-
-            <button class="btn btn-primary-custom" id="generateButton" disabled onclick="generateConfiguration()">
-                <i class="fa-solid fa-rocket"></i>
-                Generate Webhook Configuration
-            </button>
-
-            <div id="responseContainer"></div>
+    <!-- 1. URL -->
+    <div class="card">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            Step 1 — Destination
+        </div>
+        <div class="field">
+            <label class="field-label">Public URL Root</label>
+            <input type="text" id="webhookUrlRoot" placeholder="https://drips.beem.africa">
+            <p class="hint">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                The base URL where your <code>webhook_api.php</code> is hosted.
+            </p>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        const PHP_API_FILE = 'webhook_api.php';
-        let templates = [];
-        let dripStepCounter = 0;
-        let autoresponderStepCounter = 1;
-        let hybridStepCounter = 0;
+    <!-- 2. List -->
+    <div class="card">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            Step 2 — Target List
+        </div>
+        <div class="field">
+            <label class="field-label">Sendy Brand</label>
+            <select id="brandSelect" disabled>
+                <option>Loading brands…</option>
+            </select>
+        </div>
+        <div class="field">
+            <label class="field-label">Mailing List</label>
+            <select id="listSelect" disabled>
+                <option>Select a brand first</option>
+            </select>
+        </div>
+    </div>
 
-        const brandSelect = document.getElementById('brandSelect');
-        const listSelect = document.getElementById('listSelect');
-        const webhookUrlRootInput = document.getElementById('webhookUrlRoot');
-        const generateButton = document.getElementById('generateButton');
-        const responseContainer = document.getElementById('responseContainer');
-        const singleTemplate = document.getElementById('singleTemplate');
-        const singleConfig = document.getElementById('singleConfig');
-        const dripConfig = document.getElementById('dripConfig');
-        const mirrorConfig = document.getElementById('mirrorConfig');
-        const hybridConfig = document.getElementById('hybridConfig');
-        const dripBuilder = document.getElementById('dripBuilder');
-        const autoresponderMapping = document.getElementById('autoresponderMapping');
-        const hybridBuilder = document.getElementById('hybridBuilder');
+    <!-- 3. Name -->
+    <div class="card">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Step 3 — Webhook Name
+        </div>
+        <div class="field">
+            <label class="field-label">Name</label>
+            <input type="text" id="webhookName" placeholder="e.g. Welcome Sequence — Fintech East">
+            <p class="hint">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                A descriptive label to identify this webhook later.
+            </p>
+        </div>
+    </div>
 
-        document.addEventListener('DOMContentLoaded', initializeUI);
+    <!-- 4. Mode -->
+    <div class="card">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+            Step 4 — Drip Mode
+        </div>
+        <div class="mode-grid">
+            <div class="mode-card active" data-mode="single">
+                <div class="mode-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <div class="mode-name">Single Message</div>
+                <div class="mode-desc">One WhatsApp message on subscribe.</div>
+            </div>
+            <div class="mode-card" data-mode="drip_sequence">
+                <div class="mode-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                </div>
+                <div class="mode-name">Drip Sequence</div>
+                <div class="mode-desc">Timed WhatsApp messages, independent of email.</div>
+            </div>
+            <div class="mode-card" data-mode="mirror_autoresponder">
+                <div class="mode-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-3"/><path d="M12 8v8M8 12h8"/></svg>
+                </div>
+                <div class="mode-name">Mirror Autoresponder</div>
+                <div class="mode-desc">Sync WhatsApp with Sendy email autoresponders.</div>
+            </div>
+            <div class="mode-card" data-mode="hybrid_drip">
+                <div class="mode-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                </div>
+                <div class="mode-name">Hybrid Drip</div>
+                <div class="mode-desc">Alternate Email and WhatsApp in one sequence.</div>
+            </div>
+        </div>
+    </div>
 
-        async function apiCall(action, method = 'GET', body = null, queryParams = {}) {
-            let url = `${PHP_API_FILE}?action=${action}`;
-            for (const [key, value] of Object.entries(queryParams)) {
-                url += `&${key}=${encodeURIComponent(value)}`;
-            }
-            const options = { method, headers: { 'Content-Type': 'application/json' } };
-            if (body && method === 'POST') options.body = JSON.stringify(body);
-            try {
-                const response = await fetch(url, options);
-                return await response.json();
-            } catch (error) {
-                return { status: 'error', message: `Network error: ${error.message}` };
-            }
+    <!-- 5. Config -->
+    <!-- Single -->
+    <div class="card" id="singleConfig">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Step 5 — WhatsApp Template
+        </div>
+        <div class="field">
+            <label class="field-label">Template</label>
+            <select id="singleTemplate" disabled><option>Loading templates…</option></select>
+        </div>
+    </div>
+
+    <!-- Drip Sequence -->
+    <div class="card d-none" id="dripConfig">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Step 5 — Drip Sequence
+        </div>
+        <div class="builder-wrap" id="dripBuilder"></div>
+        <button class="btn-add" onclick="addDripStep()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Add Step
+        </button>
+    </div>
+
+    <!-- Mirror -->
+    <div class="card d-none" id="mirrorConfig">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-3"/><path d="M12 8v8M8 12h8"/></svg>
+            Step 5 — Autoresponder Mapping
+        </div>
+        <div class="builder-wrap" id="autoresponderMapping"></div>
+        <button class="btn-add" onclick="addAutoresponderMapping()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Add Mapping
+        </button>
+    </div>
+
+    <!-- Hybrid -->
+    <div class="card d-none" id="hybridConfig">
+        <div class="card-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+            Step 5 — Hybrid Sequence
+        </div>
+        <div class="builder-wrap" id="hybridBuilder"></div>
+        <button class="btn-add" onclick="addHybridStep()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Add Step
+        </button>
+    </div>
+
+    <!-- Generate -->
+    <button class="btn-primary" id="generateButton" disabled onclick="generateConfiguration()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generate Webhook
+    </button>
+
+    <div id="responseContainer"></div>
+</div>
+
+<script>
+    const PHP_API_FILE = 'webhook_api.php';
+    let templates = [];
+    let dripStepCounter = 0, autoresponderStepCounter = 1, hybridStepCounter = 0;
+
+    const brandSelect = document.getElementById('brandSelect');
+    const listSelect = document.getElementById('listSelect');
+    const webhookUrlRootInput = document.getElementById('webhookUrlRoot');
+    const generateButton = document.getElementById('generateButton');
+    const responseContainer = document.getElementById('responseContainer');
+    const singleTemplate = document.getElementById('singleTemplate');
+    const dripBuilder = document.getElementById('dripBuilder');
+    const autoresponderMapping = document.getElementById('autoresponderMapping');
+    const hybridBuilder = document.getElementById('hybridBuilder');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchBrands();
+        fetchTemplates();
+        setupModeSelector();
+        brandSelect.addEventListener('change', fetchLists);
+        listSelect.addEventListener('change', checkReadiness);
+        singleTemplate.addEventListener('change', checkReadiness);
+        webhookUrlRootInput.addEventListener('input', checkReadiness);
+    });
+
+    async function apiCall(action, method = 'GET', body = null, queryParams = {}) {
+        let url = `${PHP_API_FILE}?action=${action}`;
+        for (const [k, v] of Object.entries(queryParams)) url += `&${k}=${encodeURIComponent(v)}`;
+        const options = { method, headers: { 'Content-Type': 'application/json' } };
+        if (body && method === 'POST') options.body = JSON.stringify(body);
+        try {
+            const res = await fetch(url, options);
+            const data = await res.json();
+            if (res.status === 401) { window.location.href = 'login.php'; return; }
+            return data;
+        } catch (e) {
+            return { status: 'error', message: `Network error: ${e.message}` };
         }
+    }
 
-        function initializeUI() {
-            fetchBrands();
-            fetchTemplates();
-            setupModeSelector();
-            brandSelect.addEventListener('change', fetchLists);
-            listSelect.addEventListener('change', checkReadiness);
-            singleTemplate.addEventListener('change', checkReadiness);
-            webhookUrlRootInput.addEventListener('input', checkReadiness);
-        }
+    function setupModeSelector() {
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                switchMode(card.dataset.mode);
+            });
+        });
+    }
 
-        function setupModeSelector() {
-            document.querySelectorAll('.mode-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
-                    card.classList.add('active');
-                    switchMode(card.dataset.mode);
-                });
+    function switchMode(mode) {
+        ['singleConfig','dripConfig','mirrorConfig','hybridConfig'].forEach(id => {
+            document.getElementById(id).classList.add('d-none');
+        });
+        if (mode === 'single') document.getElementById('singleConfig').classList.remove('d-none');
+        else if (mode === 'drip_sequence') { document.getElementById('dripConfig').classList.remove('d-none'); if (!dripBuilder.children.length) addDripStep(); }
+        else if (mode === 'mirror_autoresponder') { document.getElementById('mirrorConfig').classList.remove('d-none'); if (!autoresponderMapping.children.length) addAutoresponderMapping(); }
+        else if (mode === 'hybrid_drip') { document.getElementById('hybridConfig').classList.remove('d-none'); if (!hybridBuilder.children.length) addHybridStep(); }
+        checkReadiness();
+    }
+
+    function checkReadiness() {
+        const mode = document.querySelector('.mode-card.active').dataset.mode;
+        let ready = brandSelect.value && listSelect.value && webhookUrlRootInput.value.trim();
+        if (mode === 'single') ready = ready && singleTemplate.value;
+        else if (mode === 'drip_sequence') ready = ready && dripBuilder.children.length > 0;
+        else if (mode === 'mirror_autoresponder') ready = ready && autoresponderMapping.children.length > 0;
+        else if (mode === 'hybrid_drip') ready = ready && hybridBuilder.children.length > 0;
+        generateButton.disabled = !ready;
+    }
+
+    async function fetchBrands() {
+        brandSelect.disabled = true;
+        const data = await apiCall('brands');
+        brandSelect.innerHTML = '<option value="">Select brand…</option>';
+        if (data && Array.isArray(data)) data.forEach(b => brandSelect.innerHTML += `<option value="${b.id}">${b.name}</option>`);
+        brandSelect.disabled = false;
+    }
+
+    async function fetchLists() {
+        const brandId = brandSelect.value;
+        listSelect.disabled = true;
+        listSelect.innerHTML = '<option value="">Loading…</option>';
+        if (!brandId) { listSelect.innerHTML = '<option>Select a brand first</option>'; return; }
+        const data = await apiCall('lists', 'GET', null, { brandId });
+        listSelect.innerHTML = '<option value="">Select list…</option>';
+        if (data && Array.isArray(data)) data.forEach(l => listSelect.innerHTML += `<option value="${l.id}">${l.name}</option>`);
+        listSelect.disabled = false;
+        checkReadiness();
+    }
+
+    async function fetchTemplates() {
+        singleTemplate.disabled = true;
+        const data = await apiCall('whatsapp_templates');
+        singleTemplate.innerHTML = '<option value="">Select template…</option>';
+        if (data && Array.isArray(data)) {
+            templates = data;
+            data.forEach(t => {
+                const vars = t.placeholders > 0 ? ` [${t.placeholders} var(s)]` : '';
+                singleTemplate.innerHTML += `<option value="${t.id}">${t.name}${vars}</option>`;
             });
         }
+        singleTemplate.disabled = false;
+    }
 
-        function switchMode(mode) {
-            singleConfig.classList.add('d-none');
-            dripConfig.classList.add('d-none');
-            mirrorConfig.classList.add('d-none');
-            hybridConfig.classList.add('d-none');
-            
-            if (mode === 'single') {
-                singleConfig.classList.remove('d-none');
-            } else if (mode === 'drip_sequence') {
-                dripConfig.classList.remove('d-none');
-                if (dripBuilder.children.length === 0) addDripStep();
-            } else if (mode === 'mirror_autoresponder') {
-                mirrorConfig.classList.remove('d-none');
-                if (autoresponderMapping.children.length === 0) addAutoresponderMapping();
-            } else if (mode === 'hybrid_drip') {
-                hybridConfig.classList.remove('d-none');
-                if (hybridBuilder.children.length === 0) addHybridStep();
-            }
-            checkReadiness();
-        }
+    function templateOptions(selected = '') {
+        return `<option value="">Select template…</option>` + templates.map(t => `<option value="${t.id}" ${t.id == selected ? 'selected' : ''}>${t.name}</option>`).join('');
+    }
 
-        function checkReadiness() {
-            const mode = document.querySelector('.mode-card.active').dataset.mode;
-            let ready = brandSelect.value && listSelect.value && webhookUrlRootInput.value.trim();
-            
-            if (mode === 'single') {
-                ready = ready && singleTemplate.value;
-            } else if (mode === 'drip_sequence') {
-                ready = ready && dripBuilder.children.length > 0;
-            } else if (mode === 'mirror_autoresponder') {
-                ready = ready && autoresponderMapping.children.length > 0;
-            } else if (mode === 'hybrid_drip') {
-                ready = ready && hybridBuilder.children.length > 0;
-            }
-            generateButton.disabled = !ready;
-        }
+    function unitOptions(selected = 'minutes') {
+        return ['minutes','hours','days','weeks','months'].map(u => `<option value="${u}" ${u===selected?'selected':''}>${u.charAt(0).toUpperCase()+u.slice(1)}</option>`).join('');
+    }
 
-        async function fetchBrands() {
-            brandSelect.disabled = true;
-            const data = await apiCall('brands');
-            brandSelect.innerHTML = '<option value="">Select Brand</option>';
-            if (!data.status && Array.isArray(data)) {
-                data.forEach(brand => {
-                    brandSelect.innerHTML += `<option value="${brand.id}">${brand.name}</option>`;
-                });
-            }
-            brandSelect.disabled = false;
-        }
-
-        async function fetchLists() {
-            const brandId = brandSelect.value;
-            listSelect.disabled = true;
-            if (!brandId) {
-                listSelect.innerHTML = '<option>Select a Brand First</option>';
-                return;
-            }
-            const data = await apiCall('lists', 'GET', null, { brandId });
-            listSelect.innerHTML = '<option value="">Select List</option>';
-            if (!data.status && Array.isArray(data)) {
-                data.forEach(list => {
-                    listSelect.innerHTML += `<option value="${list.id}">${list.name}</option>`;
-                });
-            }
-            listSelect.disabled = false;
-        }
-
-        async function fetchTemplates() {
-            singleTemplate.disabled = true;
-            const data = await apiCall('whatsapp_templates');
-            singleTemplate.innerHTML = '<option value="">Select Template</option>';
-            if (!data.status && Array.isArray(data)) {
-                templates = data;
-                data.forEach(t => {
-                    const vars = t.placeholders > 0 ? ` [${t.placeholders} var(s)]` : '';
-                    singleTemplate.innerHTML += `<option value="${t.id}">${t.name}${vars}</option>`;
-                });
-            }
-            singleTemplate.disabled = false;
-        }
-
-        function addDripStep() {
-            dripStepCounter++;
-            const stepNumber = dripBuilder.children.length + 1;
-            
-            // Smart default values based on step number
-            let defaultDelay = 0;
-            let defaultUnit = 'minutes';
-            
-            if (stepNumber === 1) {
-                defaultDelay = 0;
-                defaultUnit = 'minutes';
-            } else if (stepNumber === 2) {
-                defaultDelay = 1;
-                defaultUnit = 'hours';
-            } else {
-                defaultDelay = stepNumber - 1;
-                defaultUnit = 'days';
-            }
-            
-            const stepHtml = `
-                <div class="drip-step" data-step="${dripStepCounter}">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="step-number">${stepNumber}</div>
-                        <button class="btn btn-remove" onclick="removeDripStep(${dripStepCounter})">
-                            <i class="fa-solid fa-trash"></i> Remove
-                        </button>
+    // ── DRIP STEPS ──
+    function addDripStep() {
+        dripStepCounter++;
+        const n = dripBuilder.children.length + 1;
+        let delay = 0, unit = 'minutes';
+        if (n === 2) { delay = 1; unit = 'hours'; }
+        else if (n > 2) { delay = n - 1; unit = 'days'; }
+        dripBuilder.insertAdjacentHTML('beforeend', `
+            <div class="drip-step" data-step="${dripStepCounter}">
+                <div class="step-header">
+                    <div class="step-badge">
+                        <div class="step-num">${n}</div>
+                        <span class="step-title">Step ${n}</span>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small">
-                            <i class="fa-brands fa-whatsapp"></i> WhatsApp Template
-                        </label>
-                        <select class="form-select drip-template" data-step="${dripStepCounter}">
-                            <option value="">Select Template</option>
-                            ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
-                        </select>
+                    <button class="btn-remove" onclick="removeDripStep(${dripStepCounter})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                        Remove
+                    </button>
+                </div>
+                <div class="step-grid">
+                    <div class="field">
+                        <label class="field-label">WhatsApp Template</label>
+                        <select class="drip-template" data-step="${dripStepCounter}">${templateOptions()}</select>
                     </div>
-                    <div>
-                        <label class="form-label small">
-                            <i class="fa-solid fa-clock"></i> Send After
-                        </label>
-                        <div class="input-group-time">
-                            <input type="number" class="form-control drip-delay" data-step="${dripStepCounter}" 
-                                   min="0" value="${defaultDelay}" placeholder="0">
-                            <select class="form-select drip-unit" data-step="${dripStepCounter}">
-                                <option value="minutes" ${defaultUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
-                                <option value="hours" ${defaultUnit === 'hours' ? 'selected' : ''}>Hours</option>
-                                <option value="days" ${defaultUnit === 'days' ? 'selected' : ''}>Days</option>
-                                <option value="weeks" ${defaultUnit === 'weeks' ? 'selected' : ''}>Weeks</option>
-                                <option value="months" ${defaultUnit === 'months' ? 'selected' : ''}>Months</option>
-                            </select>
+                    <div class="field">
+                        <label class="field-label">Send after</label>
+                        <div class="time-row">
+                            <input type="number" class="drip-delay" data-step="${dripStepCounter}" min="0" value="${delay}">
+                            <select class="drip-unit" data-step="${dripStepCounter}">${unitOptions(unit)}</select>
                         </div>
-                        <small class="text-muted">
-                            <i class="fa-solid fa-info-circle"></i> 
-                            Delay from previous step (or subscription for first step)
-                        </small>
                     </div>
                 </div>
-            `;
-            dripBuilder.insertAdjacentHTML('beforeend', stepHtml);
-            updateDripStepNumbers();
-            checkReadiness();
-        }
+            </div>`);
+        updateStepNumbers(dripBuilder, '.drip-step');
+        checkReadiness();
+    }
 
-        function removeDripStep(stepId) {
-            dripBuilder.querySelector(`[data-step="${stepId}"]`)?.remove();
-            updateDripStepNumbers();
-            checkReadiness();
-        }
+    function removeDripStep(id) {
+        dripBuilder.querySelector(`[data-step="${id}"]`)?.remove();
+        updateStepNumbers(dripBuilder, '.drip-step');
+        checkReadiness();
+    }
 
-        function updateDripStepNumbers() {
-            dripBuilder.querySelectorAll('.drip-step').forEach((step, index) => {
-                step.querySelector('.step-number').textContent = index + 1;
-            });
-        }
+    // ── AUTORESPONDER ──
+    function addAutoresponderMapping() {
+        autoresponderMapping.insertAdjacentHTML('beforeend', `
+            <div class="mapping-row" data-mapping="${autoresponderStepCounter}">
+                <span class="mapping-label">Email Step ${autoresponderStepCounter}</span>
+                <select class="autoresponder-template" data-mapping="${autoresponderStepCounter}">${templateOptions()}</select>
+            </div>`);
+        autoresponderStepCounter++;
+        checkReadiness();
+    }
 
-        function addAutoresponderMapping() {
-            const mappingHtml = `
-                <div class="mapping-row" data-mapping="${autoresponderStepCounter}">
-                    <label class="form-label small">
-                        <i class="fa-solid fa-envelope"></i> Email Step ${autoresponderStepCounter}
-                    </label>
-                    <select class="form-select autoresponder-template" data-mapping="${autoresponderStepCounter}">
-                        <option value="">Select WhatsApp Template</option>
-                        ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
-                    </select>
+    // ── HYBRID STEPS ──
+    function addHybridStep() {
+        hybridStepCounter++;
+        const n = hybridBuilder.children.length + 1;
+        const defCh = n % 2 === 1 ? 'whatsapp' : 'email';
+        let delay = 0, unit = 'minutes';
+        if (n === 2) { delay = 2; unit = 'hours'; }
+        else if (n > 2) { delay = n - 1; unit = 'days'; }
+        hybridBuilder.insertAdjacentHTML('beforeend', `
+            <div class="drip-step" data-hybrid-step="${hybridStepCounter}">
+                <div class="step-header">
+                    <div class="step-badge">
+                        <div class="step-num">${n}</div>
+                        <span class="step-title">Step ${n}</span>
+                    </div>
+                    <button class="btn-remove" onclick="removeHybridStep(${hybridStepCounter})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+                        Remove
+                    </button>
                 </div>
-            `;
-            autoresponderMapping.insertAdjacentHTML('beforeend', mappingHtml);
-            autoresponderStepCounter++;
-            checkReadiness();
-        }
-
-        function addHybridStep() {
-            hybridStepCounter++;
-            const stepNumber = hybridBuilder.children.length + 1;
-            
-            // Smart default values based on step number
-            let defaultDelay = 0;
-            let defaultUnit = 'minutes';
-            let defaultChannel = stepNumber % 2 === 1 ? 'whatsapp' : 'email';
-            
-            if (stepNumber === 1) {
-                defaultDelay = 0;
-                defaultUnit = 'minutes';
-            } else if (stepNumber === 2) {
-                defaultDelay = 2;
-                defaultUnit = 'hours';
-            } else {
-                defaultDelay = stepNumber - 1;
-                defaultUnit = 'days';
-            }
-            
-            const stepHtml = `
-                <div class="drip-step" data-hybrid-step="${hybridStepCounter}">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="step-number">${stepNumber}</div>
-                        <button class="btn btn-remove" onclick="removeHybridStep(${hybridStepCounter})">
-                            <i class="fa-solid fa-trash"></i> Remove
-                        </button>
-                    </div>
-                    
-                    <div class="channel-selector mb-3">
-                        <button type="button" class="channel-btn whatsapp ${defaultChannel === 'whatsapp' ? 'active' : ''}" 
-                                onclick="setHybridChannel(${hybridStepCounter}, 'whatsapp')">
-                            <i class="fa-brands fa-whatsapp channel-icon"></i>
-                            WhatsApp
-                        </button>
-                        <button type="button" class="channel-btn email ${defaultChannel === 'email' ? 'active' : ''}" 
-                                onclick="setHybridChannel(${hybridStepCounter}, 'email')">
-                            <i class="fa-solid fa-envelope channel-icon"></i>
-                            Email
-                        </button>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label small">
-                            <i class="fa-solid fa-heading"></i> Step Name
-                        </label>
-                        <input type="text" class="form-control hybrid-step-name" 
-                               data-step="${hybridStepCounter}" 
-                               placeholder="e.g., Welcome Message, Follow-up, Offer">
-                    </div>
-                    
-                    <div id="whatsappConfig-${hybridStepCounter}" class="${defaultChannel === 'whatsapp' ? '' : 'd-none'}">
-                        <label class="form-label small">
-                            <i class="fa-brands fa-whatsapp"></i> WhatsApp Template
-                            <span class="template-required">*</span>
-                        </label>
-                        <select class="form-select hybrid-whatsapp-template" data-step="${hybridStepCounter}">
-                            <option value="">Select Template</option>
-                            ${templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    
-                    <div id="emailConfig-${hybridStepCounter}" class="${defaultChannel === 'email' ? '' : 'd-none'}">
-                        <label class="form-label small">
-                            <i class="fa-solid fa-envelope"></i> Email Subject
-                            <span class="template-required">*</span>
-                        </label>
-                        <input type="text" class="form-control hybrid-email-subject" 
-                               data-step="${hybridStepCounter}" 
-                               placeholder="e.g., Welcome to our newsletter!">
-                    </div>
-                    
-                    <div class="mt-3">
-                        <label class="form-label small">
-                            <i class="fa-solid fa-clock"></i> Send After
-                        </label>
-                        <div class="input-group-time">
-                            <input type="number" class="form-control hybrid-delay" data-step="${hybridStepCounter}" 
-                                   min="0" value="${defaultDelay}" placeholder="0">
-                            <select class="form-select hybrid-unit" data-step="${hybridStepCounter}">
-                                <option value="minutes" ${defaultUnit === 'minutes' ? 'selected' : ''}>Minutes</option>
-                                <option value="hours" ${defaultUnit === 'hours' ? 'selected' : ''}>Hours</option>
-                                <option value="days" ${defaultUnit === 'days' ? 'selected' : ''}>Days</option>
-                                <option value="weeks" ${defaultUnit === 'weeks' ? 'selected' : ''}>Weeks</option>
-                                <option value="months" ${defaultUnit === 'months' ? 'selected' : ''}>Months</option>
-                            </select>
-                        </div>
-                        <small class="text-muted">
-                            <i class="fa-solid fa-info-circle"></i> 
-                            Delay from previous step (or subscription for first step)
-                        </small>
+                <div class="channel-toggle">
+                    <button type="button" class="ch-btn wa ${defCh==='whatsapp'?'active':''}" onclick="setHybridChannel(${hybridStepCounter},'whatsapp')">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                        WhatsApp
+                    </button>
+                    <button type="button" class="ch-btn em ${defCh==='email'?'active':''}" onclick="setHybridChannel(${hybridStepCounter},'email')">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+                        Email
+                    </button>
+                </div>
+                <div id="hwa-${hybridStepCounter}" class="${defCh==='whatsapp'?'':'d-none'} field">
+                    <label class="field-label">WhatsApp Template</label>
+                    <select class="hybrid-whatsapp-template" data-step="${hybridStepCounter}">${templateOptions()}</select>
+                </div>
+                <div id="hem-${hybridStepCounter}" class="${defCh==='email'?'':'d-none'} field">
+                    <label class="field-label">Email Subject</label>
+                    <input type="text" class="hybrid-email-subject" data-step="${hybridStepCounter}" placeholder="e.g. Welcome to our community!">
+                </div>
+                <div class="field" style="margin-top:12px">
+                    <label class="field-label">Send after</label>
+                    <div class="time-row">
+                        <input type="number" class="hybrid-delay" data-step="${hybridStepCounter}" min="0" value="${delay}">
+                        <select class="hybrid-unit" data-step="${hybridStepCounter}">${unitOptions(unit)}</select>
                     </div>
                 </div>
-            `;
-            hybridBuilder.insertAdjacentHTML('beforeend', stepHtml);
-            updateHybridStepNumbers();
-            checkReadiness();
-        }
+            </div>`);
+        updateStepNumbers(hybridBuilder, '.drip-step');
+        checkReadiness();
+    }
 
-        function removeHybridStep(stepId) {
-            hybridBuilder.querySelector(`[data-hybrid-step="${stepId}"]`)?.remove();
-            updateHybridStepNumbers();
-            checkReadiness();
-        }
+    function removeHybridStep(id) {
+        hybridBuilder.querySelector(`[data-hybrid-step="${id}"]`)?.remove();
+        updateStepNumbers(hybridBuilder, '.drip-step');
+        checkReadiness();
+    }
 
-        function updateHybridStepNumbers() {
-            hybridBuilder.querySelectorAll('.drip-step').forEach((step, index) => {
-                step.querySelector('.step-number').textContent = index + 1;
+    function setHybridChannel(stepId, channel) {
+        const el = hybridBuilder.querySelector(`[data-hybrid-step="${stepId}"]`);
+        if (!el) return;
+        el.querySelectorAll('.ch-btn').forEach(b => b.classList.remove('active'));
+        el.querySelector(`.ch-btn.${channel === 'whatsapp' ? 'wa' : 'em'}`).classList.add('active');
+        el.querySelector(`#hwa-${stepId}`).classList.toggle('d-none', channel !== 'whatsapp');
+        el.querySelector(`#hem-${stepId}`).classList.toggle('d-none', channel !== 'email');
+        checkReadiness();
+    }
+
+    function updateStepNumbers(container, selector) {
+        container.querySelectorAll(selector).forEach((s, i) => {
+            const num = i + 1;
+            s.querySelector('.step-num').textContent = num;
+            s.querySelector('.step-title').textContent = `Step ${num}`;
+        });
+    }
+
+    // ── GENERATE ──
+    async function generateConfiguration() {
+        const mode = document.querySelector('.mode-card.active').dataset.mode;
+        const listId = listSelect.value;
+        const listName = listSelect.options[listSelect.selectedIndex].text;
+        const webhookName = document.getElementById('webhookName').value;
+        const webhookUrlRoot = webhookUrlRootInput.value.trim().replace(/\/$/, '');
+        let config = { mode };
+
+        if (mode === 'single') {
+            config.template_id = singleTemplate.value;
+        } else if (mode === 'drip_sequence') {
+            config.sequence = [];
+            dripBuilder.querySelectorAll('.drip-step').forEach(step => {
+                const id = step.dataset.step;
+                const tmpl = step.querySelector(`.drip-template[data-step="${id}"]`).value;
+                const delay = step.querySelector(`.drip-delay[data-step="${id}"]`).value;
+                const unit = step.querySelector(`.drip-unit[data-step="${id}"]`).value;
+                if (tmpl && delay !== '') config.sequence.push({ template_id: tmpl, delay: parseInt(delay), delay_unit: unit, name: templates.find(t => t.id == tmpl)?.name || 'Step' });
             });
-        }
-
-        function setHybridChannel(stepId, channel) {
-            const stepElement = hybridBuilder.querySelector(`[data-hybrid-step="${stepId}"]`);
-            if (!stepElement) return;
-            
-            // Update button states
-            stepElement.querySelectorAll('.channel-btn').forEach(btn => {
-                btn.classList.remove('active');
+            if (!config.sequence.length) { showError('Please configure at least one drip step.'); return; }
+        } else if (mode === 'mirror_autoresponder') {
+            config.autoresponder_id = 'autoresponder_' + listId;
+            config.template_map = {};
+            autoresponderMapping.querySelectorAll('.mapping-row').forEach((row, i) => {
+                const tmpl = row.querySelector('.autoresponder-template').value;
+                if (tmpl) config.template_map[i + 1] = tmpl;
             });
-            stepElement.querySelector(`.channel-btn.${channel}`).classList.add('active');
-            
-            // Show/hide configuration sections
-            stepElement.querySelector(`#whatsappConfig-${stepId}`).classList.toggle('d-none', channel !== 'whatsapp');
-            stepElement.querySelector(`#emailConfig-${stepId}`).classList.toggle('d-none', channel !== 'email');
-            
-            checkReadiness();
-        }
-
-        async function generateConfiguration() {
-            const mode = document.querySelector('.mode-card.active').dataset.mode;
-            const listId = listSelect.value;
-            const listName = listSelect.options[listSelect.selectedIndex].text;
-            const webhookName = document.getElementById('webhookName').value;
-            const webhookUrlRoot = webhookUrlRootInput.value.trim().replace(/\/$/, '');
-            let config = { mode };
-            
-            if (mode === 'single') {
-                config.template_id = singleTemplate.value;
-            } else if (mode === 'drip_sequence') {
-                config.sequence = [];
-                dripBuilder.querySelectorAll('.drip-step').forEach(step => {
-                    const stepId = step.dataset.step;
-                    const template = step.querySelector(`.drip-template[data-step="${stepId}"]`).value;
-                    const delay = step.querySelector(`.drip-delay[data-step="${stepId}"]`).value;
-                    const unit = step.querySelector(`.drip-unit[data-step="${stepId}"]`).value;
-                    
-                    if (template && delay !== '') {
-                        config.sequence.push({
-                            template_id: template,
-                            delay: parseInt(delay),
-                            delay_unit: unit,
-                            name: templates.find(t => t.id == template)?.name || 'Step'
-                        });
-                    }
-                });
-                if (config.sequence.length === 0) {
-                    showAlert('error', 'Please configure at least one drip step.');
-                    return;
+            if (!Object.keys(config.template_map).length) { showError('Please configure at least one mapping.'); return; }
+        } else if (mode === 'hybrid_drip') {
+            config.sequence = [];
+            let err = false;
+            hybridBuilder.querySelectorAll('.drip-step').forEach(step => {
+                if (err) return;
+                const id = step.dataset.hybridStep;
+                const channel = step.querySelector('.ch-btn.wa.active') ? 'whatsapp' : 'email';
+                const delay = step.querySelector(`.hybrid-delay[data-step="${id}"]`).value;
+                const unit = step.querySelector(`.hybrid-unit[data-step="${id}"]`).value;
+                const sc = { channel, delay: parseInt(delay), delay_unit: unit, name: `${channel} Step` };
+                if (channel === 'whatsapp') {
+                    const tmpl = step.querySelector(`.hybrid-whatsapp-template[data-step="${id}"]`).value;
+                    if (!tmpl) { showError('Please select a WhatsApp template for all WhatsApp steps.'); err = true; return; }
+                    sc.template_id = tmpl;
+                } else {
+                    const subj = step.querySelector(`.hybrid-email-subject[data-step="${id}"]`).value;
+                    if (!subj) { showError('Please enter an email subject for all Email steps.'); err = true; return; }
+                    sc.subject = subj;
                 }
-            } else if (mode === 'mirror_autoresponder') {
-                config.autoresponder_id = 'autoresponder_' + listId;
-                config.template_map = {};
-                autoresponderMapping.querySelectorAll('.mapping-row').forEach((row, index) => {
-                    const template = row.querySelector(`.autoresponder-template`).value;
-                    if (template) config.template_map[index + 1] = template;
-                });
-                if (Object.keys(config.template_map).length === 0) {
-                    showAlert('error', 'Please configure at least one mapping.');
-                    return;
-                }
-            } else if (mode === 'hybrid_drip') {
-                config.sequence = [];
-                hybridBuilder.querySelectorAll('.drip-step').forEach(step => {
-                    const stepId = step.dataset.hybridStep;
-                    const channel = step.querySelector('.channel-btn.whatsapp.active') ? 'whatsapp' : 'email';
-                    const stepName = step.querySelector(`.hybrid-step-name[data-step="${stepId}"]`).value;
-                    const delay = step.querySelector(`.hybrid-delay[data-step="${stepId}"]`).value;
-                    const unit = step.querySelector(`.hybrid-unit[data-step="${stepId}"]`).value;
-                    
-                    if (!delay || delay === '') {
-                        showAlert('error', 'Please enter a delay for all hybrid steps.');
-                        return;
-                    }
-                    
-                    const stepConfig = {
-                        channel: channel,
-                        delay: parseInt(delay),
-                        delay_unit: unit,
-                        name: stepName || `${channel} Step`
-                    };
-                    
-                    if (channel === 'whatsapp') {
-                        const template = step.querySelector(`.hybrid-whatsapp-template[data-step="${stepId}"]`).value;
-                        if (!template) {
-                            showAlert('error', 'Please select a WhatsApp template for WhatsApp steps.');
-                            return;
-                        }
-                        stepConfig.template_id = template;
-                    } else {
-                        const subject = step.querySelector(`.hybrid-email-subject[data-step="${stepId}"]`).value;
-                        if (!subject) {
-                            showAlert('error', 'Please enter an email subject for Email steps.');
-                            return;
-                        }
-                        stepConfig.subject = subject;
-                    }
-                    
-                    config.sequence.push(stepConfig);
-                });
-                
-                if (config.sequence.length === 0) {
-                    showAlert('error', 'Please configure at least one hybrid step.');
-                    return;
-                }
-                
-                // Validate we have both email and WhatsApp steps
-                const whatsappSteps = config.sequence.filter(s => s.channel === 'whatsapp').length;
-                const emailSteps = config.sequence.filter(s => s.channel === 'email').length;
-                
-                if (whatsappSteps === 0) {
-                    showAlert('error', 'Hybrid sequence must include at least one WhatsApp step.');
-                    return;
-                }
-                
-                if (emailSteps === 0) {
-                    showAlert('error', 'Hybrid sequence must include at least one Email step.');
-                    return;
-                }
-            }
-
-            generateButton.disabled = true;
-            generateButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Generating...';
-
-            const data = await apiCall('save_configuration', 'POST', {
-                list_id: listId,
-                list_name: listName,
-                webhook_name: webhookName || listName + ' - ' + mode, // Default name
-                webhook_url_root: webhookUrlRoot,
-                config: config
+                config.sequence.push(sc);
             });
-
-            generateButton.disabled = false;
-            generateButton.innerHTML = '<i class="fa-solid fa-rocket"></i> Generate Webhook Configuration';
-
-            if (data.status === 'success') {
-                showSuccessResponse(data, mode, config);
-            } else {
-                showAlert('error', `Failed: ${data.message}`);
-            }
-        }
-        function showSuccessResponse(data, mode, config) {
-            let html = `<div class="alert alert-success mt-4">
-                <i class="fa-solid fa-circle-check"></i> Configuration Saved Successfully!
-                <br><small class="text-muted">Token: <code>${data.token}</code></small>
-            </div>`;
-            
-            html += `<div class="webhook-url-box">
-                <strong>Subscribe Webhook:</strong><br>${data.webhook_url}
-            </div>`;
-            html += `<button class="btn btn-copy" onclick="copyText('${data.webhook_url}')">
-                <i class="fa-solid fa-copy"></i> Copy Subscribe Webhook</button>`;
-            
-            if (data.autoresponder_webhook_url) {
-                html += `<div class="webhook-url-box">
-                    <strong>Autoresponder Webhook:</strong><br>${data.autoresponder_webhook_url}
-                </div>`;
-                html += `<button class="btn btn-copy" onclick="copyText('${data.autoresponder_webhook_url}')">
-                    <i class="fa-solid fa-copy"></i> Copy Autoresponder Webhook
-                </button>`;
-            }
-            
-            html += `<div class="instructions">
-                <strong><i class="fa-solid fa-clipboard-list"></i> Next Steps:</strong>
-                <ol class="mt-2 mb-0">
-                    <li>Copy the webhook URL above (unique for this configuration)</li>
-                    <li>Go to your Sendy dashboard and edit <strong>${data.list_name}</strong></li>
-                    <li>Paste in the Subscribe webhook field</li>`;
-            
-            if (mode === 'drip_sequence') {
-                html += `<li><strong>Important:</strong> Set up cron job to run every 15 minutes:
-                    <div class="webhook-url-box mt-2" style="font-size: 12px;">
-                        */15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_drip.php
-                    </div>
-                </li>`;
-            }
-            
-            if (mode === 'mirror_autoresponder') {
-                html += `<li>In Sendy Settings → Rules, add the autoresponder webhook above</li>`;
-            }
-            
-            if (mode === 'hybrid_drip') {
-                const whatsappSteps = config.sequence.filter(s => s.channel === 'whatsapp').length;
-                const emailSteps = config.sequence.filter(s => s.channel === 'email').length;
-                
-                html += `<li><strong>Hybrid Configuration:</strong> ${config.sequence.length} steps total 
-                    (${emailSteps} email, ${whatsappSteps} WhatsApp)</li>`;
-                html += `<li><strong>Important:</strong> Set up cron job to run every 15 minutes:
-                    <div class="webhook-url-box mt-2" style="font-size: 12px;">
-                        */15 * * * * php ${data.webhook_url.split('/webhook_api.php')[0]}/process_hybrid.php
-                    </div>
-                </li>`;
-            }
-            
-            html += `</ol>
-                <div class="alert alert-info mt-3 mb-0">
-                    <i class="fa-solid fa-info-circle"></i> <strong>Note:</strong> This webhook URL is unique! 
-                    You can create multiple webhooks for the same list with different configurations.
-                </div>
-            </div>`;
-            
-            responseContainer.innerHTML = html;
+            if (err) return;
+            if (!config.sequence.length) { showError('Please add at least one step.'); return; }
+            if (!config.sequence.some(s => s.channel === 'whatsapp')) { showError('Add at least one WhatsApp step.'); return; }
+            if (!config.sequence.some(s => s.channel === 'email')) { showError('Add at least one Email step.'); return; }
         }
 
-        function showAlert(type, message) {
-            const alertClass = type === 'error' ? 'alert-danger' : 'alert-warning';
-            responseContainer.innerHTML = `<div class="alert ${alertClass} mt-4">${message}</div>`;
+        generateButton.disabled = true;
+        generateButton.innerHTML = '<div class="spinner"></div> Generating…';
+
+        const data = await apiCall('save_configuration', 'POST', {
+            list_id: listId, list_name: listName,
+            webhook_name: webhookName || `${listName} — ${mode}`,
+            webhook_url_root: webhookUrlRoot, config
+        });
+
+        generateButton.disabled = false;
+        generateButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Generate Webhook`;
+
+        if (data?.status === 'success') showSuccess(data, mode, config);
+        else showError(data?.message || 'Something went wrong.');
+    }
+
+    function showSuccess(data, mode, config) {
+        let html = `<div class="result-card">
+            <div class="result-success">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                Webhook created successfully
+            </div>
+            <div class="url-block">
+                <div class="url-block-label">Subscribe Webhook URL</div>
+                <div class="url-text">${data.webhook_url}</div>
+            </div>
+            <button class="btn-copy" onclick="copyUrl(this,'${data.webhook_url}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                Copy URL
+            </button>`;
+
+        if (data.autoresponder_webhook_url) {
+            html += `<div class="url-block">
+                <div class="url-block-label">Autoresponder Webhook URL</div>
+                <div class="url-text">${data.autoresponder_webhook_url}</div>
+            </div>
+            <button class="btn-copy" onclick="copyUrl(this,'${data.autoresponder_webhook_url}')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                Copy Autoresponder URL
+            </button>`;
         }
 
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                event.target.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-                setTimeout(() => {
-                    event.target.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
-                }, 2000);
-            });
+        html += `<div class="next-steps"><h4>Next steps</h4><ol>
+            <li>Copy the webhook URL above</li>
+            <li>In Sendy, edit <strong>${data.list_name}</strong></li>
+            <li>Paste into the Subscribe webhook field and save</li>`;
+
+        if (mode === 'drip_sequence' || mode === 'hybrid_drip') {
+            const script = mode === 'drip_sequence' ? 'process_drip.php' : 'process_hybrid.php';
+            const base = data.webhook_url.split('/webhook_api.php')[0];
+            html += `<li>Set up a cron job running every 15 minutes:<div class="cron-block">*/15 * * * * php ${base}/${script}</div></li>`;
         }
-    </script>
+
+        if (mode === 'mirror_autoresponder') html += `<li>In Sendy Settings → Rules, add the autoresponder webhook URL</li>`;
+
+        html += `</ol></div></div>`;
+        responseContainer.innerHTML = html;
+    }
+
+    function showError(msg) {
+        responseContainer.innerHTML = `<div class="alert-error">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+            ${msg}
+        </div>`;
+    }
+
+    function copyUrl(btn, text) {
+        navigator.clipboard.writeText(text).then(() => {
+            btn.classList.add('copied');
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Copied!`;
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy URL`;
+            }, 2500);
+        });
+    }
+</script>
 </body>
 </html>
