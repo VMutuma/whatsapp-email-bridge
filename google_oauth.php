@@ -9,7 +9,17 @@ ini_set('log_errors', 1);
 ini_set('error_log', 'C:/xampp/htdocs/project/whatsapp-email-bridge/data/oauth_errors.log');
 error_reporting(E_ALL);
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params([
+        'lifetime' => 1800,
+        'path'     => '/',
+        'domain'   => 'drips.beem.africa',
+        'secure'   => true,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    session_start();
+}
 require_once 'config.php';
 require_once 'auth_config.php';
 
